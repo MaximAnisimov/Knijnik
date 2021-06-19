@@ -14,11 +14,10 @@
     }
     */
 
-
     $password = md5($password."lfy8d3sq1");
 
-    $mysql = new $mysqli('Knijnik','root','root','login_bd');
-
+    $mysql = new mysqli('localhost', 'root', 'root', 'test-bd');
+    
     $result = $mysql->query("SELECT * FROM `users` WHERE `login` = '$login' AND `password` = '$password'");
     $user = $result->fetch_assoc();
     if(count($user) == 0) {
@@ -26,10 +25,7 @@
         exit();
     }
 
-    print_r($user);
-    exit();
-
-
+    setcookie('user', $user['login'], time() + 10, "/");
 
     $mysql->close();
 
