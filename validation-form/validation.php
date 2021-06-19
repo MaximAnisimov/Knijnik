@@ -29,8 +29,5 @@
 
     $mysql->close();
 
-    /*
-    header('Location: /main_page')
     header('location: /')
-    */
 ?>
