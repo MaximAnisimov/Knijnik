@@ -17,7 +17,7 @@
 
     $password = md5($password."lfy8d3sq1");
 
-    $mysql = new $mysql('localhost','root','root','login_bd');
+    $mysql = new $mysqli('Knijnik','root','root','login_bd');
 
     $result = $mysql->query("SELECT * FROM `users` WHERE `login` = '$login' AND `password` = '$password'");
     $user = $result->fetch_assoc();
