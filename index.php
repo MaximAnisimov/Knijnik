@@ -42,7 +42,7 @@
               </div>
               <div class="form-group">
                 <div class="flexcenter">
-                  <button type="submit" class="btn btn-default"></a>Войти</button>
+                  <button type="submit" class="btn btn-default">Войти</button>
                 </div>
               </div>
             </div>  
@@ -58,7 +58,8 @@
             <!--<li class="style1"><a href="#" class="nav-link px-2 link-dark">LOGO</a></li>-->
             <li class="style2 style7"><a href="#" class="nav-link px-2 link-dark headertext">Склад</a></li>
             <li class="style2 style7"><a href="#" class="nav-link px-2 link-dark headertext">Заказы</a></li>
-            <li class="style7"><a href="#" class="nav-link px-2 link-dark headertext">Информация</a></li>
+            <li class="style2 style7"><a href="#" class="nav-link px-2 link-dark headertext">Информация</a></li>
+             <li class="style7"><a href="exit.php" class="nav-link px-2 link-dark headertext">Выйти</a></li>
           </ul>
         </div>
         <img class="modal1" src="images/logo_placeholder.png" width="250" height="250">

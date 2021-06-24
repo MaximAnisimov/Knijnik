@@ -24,7 +24,7 @@
                     echo ($password." - md5 password\n");
                 ?>
                 <div class="flexcenter">
-                <button  href="/index.php" class="mybtn">Назад</button>
+                <button  href="/index.php" class="mybtn1">Назад</button>
                 </div>
         </div>
     </body>

@@ -94,7 +94,7 @@ body {
 }
 
 .headertext {
-    font-size: 20px;
+    font-size: 20px!important;
 }
 
 .footertext {
@@ -119,7 +119,21 @@ body {
     border-radius: 10px 10px 0px 0px;
 }
 
-.mybtn {
+.mybtn1 {
+    padding: 7px 20px;
+    color: #FFFFFF;
+    background: #A9A8B3;
+    border-color: #707070;
+    font-size: 16px;
+    border-style: solid;
+    border-radius: 10px!important;
+    padding: 10px 25px;
+    text-transform: capitalize;
+    transition: all 0.5s ease 0s;
+    margin-bottom: 5px;
+}
+
+.mybtn2 {
     padding: 7px 20px;
     color: #FFFFFF;
     background: #A9A8B3;

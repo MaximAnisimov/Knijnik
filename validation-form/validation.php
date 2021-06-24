@@ -25,7 +25,7 @@
         exit();
     }
 
-    setcookie('user', $user['login'], time() + 10, "/");
+    setcookie('user', $user['login'], time() + 3600, "/");
 
     $mysql->close();
 
