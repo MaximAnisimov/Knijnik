@@ -6,7 +6,8 @@
         <!-- CSS -->
         <link rel="stylesheet" href="css/style.css">
         <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"> -->
+        <link href="/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <title>Главная</title>
     </head>
     <body>
@@ -63,7 +64,7 @@
         <img class="modal1" src="images/logo_placeholder.png" width="250" height="250">
         <div class="footer col-12">
           <ul class="nav col-12 col-md-auto justify-content-center mb-md-0">
-          <li class="style2 style7"><a href="#" class="nav-link px-2 footertext style3">Техподдержка: +(ХХХ) ХХХ-ХХ-ХХ<br>Менеджер: +(ХХХ) ХХХ-ХХ-ХХ</a></li>
+          <li class="style2 style7"><a href="#" class="style3 nav-link px-2 footertext">Техподдержка: +(ХХХ) ХХХ-ХХ-ХХ<br>Менеджер: +(ХХХ) ХХХ-ХХ-ХХ</a></li>
           <li class="style7"><img class="px-2 style5" src="images/logo_placeholder.png" width="55" height="55" alt="Пример"></li>
           <!--<li class="style1"><a href="#" class="nav-link px-2 style2">LOGO</a></li>-->
           </ul>
@@ -75,5 +76,6 @@
       <!-- Optional JavaScript; Bootstrap Bundle with Popper
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
       -->
+      <!--  <script src="/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     </body>
 </html>
