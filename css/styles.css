@@ -1,0 +1,479 @@
+.palitre {
+    color:#145e63; /*темно-зеленый*/
+    color: #c6c6c6; /*светло-серый*/
+    color: #a1b1b0; /*зелено-серый*/
+    color: #f3ece1; /*серо-желтый*/
+    color: #ffffff; /*белый*/
+    color: #313131; /*черный*/
+}
+/*
+https://intop24.ru/article_15_lesson_4.php
+https://ru.stackoverflow.com/questions/284297/%D0%92%D1%8B%D0%B2%D0%B5%D1%81%D1%82%D0%B8-%D0%B8%D0%B7-%D0%B1%D0%B0%D0%B7%D1%8B-mysql-%D0%B2-%D0%B2%D0%B8%D0%B4%D0%B5-json-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0
+https://www.php.net/manual/ru/book.session.php
+при отсутсвии кукки возвращать на главную страницу
+json_encode
+*/
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
+@import url('http://fonts.cdnfonts.com/css/gotham-pro');
+* {
+    box-sizing: border-box;
+    /*position: relative;*/
+    padding: 0; margin: 0;
+}
+html {
+    height: 100%; /* tells html to go ahead and feel free to be 100% height */
+}
+body {
+    /* min-height: 100%; expands to push html to the limit */
+    /*font-family: Georgia, 'Times New Roman', Times, serif;*/
+    font-family: 'Gotham Pro', sans-serif;
+    background-color: #364657;
+    /*background-color: pink;*/
+    /*background-image: url(../images/background.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 0px -100px;*/
+    margin: 0;
+}
+.container {
+    margin: 0 auto;
+    width: 1400px;
+    align-content: center;
+    text-align: center;
+}
+/* micro clear fix (clears floats) */
+.contain:before, .contain:after {
+    content: " ";
+    display: table;
+}
+.contain:after {
+    clear: both;
+}
+.contain {
+    *zoom: 1;
+}
+
+/* login form */
+.center {
+    position: fixed; top: 50%; left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.errorbox {
+    position: fixed; top: 30%; left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: #f3ece1;
+    padding: 16px;
+    margin: 0 auto;
+    max-width: 350px;
+    border-radius: 10px;
+}
+.form-container {
+    margin: 0 auto;
+}
+.form-login {
+    padding: 16px;
+    background-color: #8795a3;
+    border-radius: 10px;
+    max-width: 350px; 
+}
+.form-container input[type=login], .form-container input[type=password], .form-container textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 2px 0 12px 0;
+    display: inline-block;
+    border: none;
+    background: #cccccc;
+}
+.form-container input[type=login]:focus, .form-container input[type=password]:focus, .form-container textarea:focus {
+    background-color: #ddd;
+    outline: none;
+}
+.form-container input[type=file] {
+    display: inline-block;
+    border: none;
+}
+/*.form-container hr {
+    border: 1px solid #f3ece1;
+    margin-bottom: 25px;
+}*/
+.form-container textarea {
+    height: 250px;
+}
+.formbtn-login {
+    font-size: 18px;
+    background-color: #364657;
+    color: #cccccc;
+    padding: 15px;
+    margin: 7px 0 0 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+.formbtn-login:hover {
+    opacity: 1;
+}
+.form-container a, .signin a {
+    color: blue;
+}
+.form-container label {
+    font-size: 22px
+}
+.signin {
+    margin: 0 auto;
+    background-color: #a1b1b0;
+    max-width: 450px;
+    padding: 15px;
+}
+.signin p {
+    margin: 0 auto;
+}
+login-form input, login-form button {
+    border-radius: 5px;
+}
+/* header */
+header {
+    /*height: 100px;*/
+    background-color: #cccccc;
+    /*background-image: url(../images/header_background.png);*/
+    background-repeat: no-repeat;
+}
+.logo {
+    margin: 0;
+    padding: 5px 0;
+    height: 100px;
+    /*width: 100px;*/
+}
+header h1 {
+    color: #364657;
+    margin: 0;
+    padding: 0 0 10px;
+    font-size: 35px
+}
+.header-worker {
+    background-color: #8795a3;
+    list-style: none;
+    padding: 0 30px;
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    position: relative;
+}
+
+.header-box-left, .header-box-right {
+    display: inline-block;
+    padding: 5px 0;
+}
+.header-box-left a{
+    text-decoration: none;
+    color: #cccccc;
+}
+.header-box-right{
+    margin-left: 25%;
+}
+.header-box-right a{
+    border-radius: 3px;
+    background: #364657;
+}
+/**/        
+/* nav */
+/*nav {
+     фиксирование сверху, без nav-content, nav-fixed и скрипта
+    position: sticky;
+    top: 0;
+    height: 50px;
+}*/
+.nav-fixed nav{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+.nav-fixed .nav-content{
+    margin: 0 auto;
+    width: 1400px;
+}
+.nav-content {
+    background-color: #364657;
+    /*box-shadow: inset 0 0 10px #ccc;*/
+    position: relative;
+}
+.nav-menu {
+    list-style: none;
+    padding: 0 30px;
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    position: relative;
+}
+.nav-menu li {
+    display: inline-block;
+    padding: 5px 0;
+}
+.nav-menu a , .header-box-right a{
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 5px;
+    padding: 6px 15px;
+    color: #cccccc;
+    border-bottom: 1px solid transparent;
+    transition: .3s linear;
+}
+.nav-menu .current, .nav-menu a:hover, .logout-box a:hover {
+    border-radius: 3px;
+    background: #cccccc;
+    color: #313131;
+    text-shadow: 0 1px 0 #f3ece1;
+    border-color: #c6c6c6;
+}
+/* отдельный стиль для кнопки войти/выйти? 
+.nav-menu .login, .nav-menu .logout {
+    
+}*/
+/**/
+/* main */
+main {
+    min-height: 100vh;
+    /*min-height: 100vh;
+    min-height: 2000px;
+    width: 100%;*/
+    margin-top: 0;
+    background-color: #cccccc;
+    transition: .3s linear;
+}
+main h1 {
+    margin: 0;
+    font-size: 30px
+}
+.main-content {
+    padding: 16px;
+    margin: 0 auto;
+}
+.formbtn-search {
+    font-size: 18px;
+    background-color: #364657;
+    color: #cccccc;
+    padding: 10px;
+    margin: 5px 0 0 0;
+    border: none;
+    cursor: pointer;
+    /*width: 100%;*/
+}
+.form-search p {
+    text-align: left;
+}
+.form-search {
+    padding: 16px;
+    background-color: #8795a3;
+    border-radius: 10px;
+    width: 424px;
+}
+.form-search input, .form-search button {
+    border-radius: 5px;
+}
+.form-container input[type=search-text]{
+    width: 240px;
+    padding: 10px;
+    margin: 5px 0 0 0;
+    display: inline-block;
+    border: none;
+    background: #cccccc;
+}
+.form-container input[type=search-text]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+.table-container {
+    /*margin: 0 auto;*/
+    margin-top: 16px;
+    font-size: 18px;
+    max-width: 1400px;
+}
+.table-container table {
+    margin-left: auto;
+    margin-right: auto;
+    /*table-layout: fixed;*/
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #cccccc;
+    background-color: #ddd;
+}
+.table-container th {
+    padding: 2px 12px;
+    background-color: #8795a3;
+    /*height: 68px;*/
+}
+.table-container td {
+    padding: 3px;
+}
+.table-container th, .table-container td {
+    text-align: center;
+    align-content: center;
+    border: 1px solid #364657;
+}
+/**/
+/* footer */
+footer {
+    background-color: #364657;
+    color: #cccccc;
+}
+.footer-content {
+    padding: 5px 0px;
+    margin: 0 auto;
+    font-size: 12px;
+}
+.footer-box {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+}
+.footer-box h4{
+    text-align: center;
+}
+.footer-box a, .footer-box div{
+    text-decoration: none;
+    color: #cccccc;
+    font-size: 12px;
+}
+/*.footer-box-right {
+    margin-left: 25%;
+}*/
+/**/
+/**/
+/**/
+/**/
+/**/
+/**/
+/* стили для мобильных */
+@media (max-width: 500px) {
+    body {
+        background-image: none;
+    }
+    .container {
+        width: 375px;
+    }
+    /* login form */
+    .errorbox {
+        position: fixed; top: 20%; left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    .form-container, .errorbox {
+        width: 250px;
+    }
+    .form-container label {
+        font-size: 16px
+    }
+    .form-container {
+        font-size: 14px;
+        padding: 10px;
+    }
+    .form-container input[type=login], .form-container input[type=password], .form-container textarea {
+        padding: 10px;
+        margin: 1px 0 6px 0;
+    }
+    .formbtn-login, .formbtn-search {
+        font-size: 14px;
+        padding: 10px;
+        margin: 2px 0 0 0;
+    }
+    /* header */
+    .logo {
+        margin: 0px;
+        padding: 1px;
+        height: 50px;
+        /*width: 100px;*/
+    }
+    header h1 {
+        margin: 0;
+        padding: 0 0 5px;
+        font-size: 22px
+    }
+    .header-worker {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 16px;
+    }    
+    .header-box-left, .header-box-right {
+        padding: 5px 0;
+    }
+    .header-box-right{
+        margin-left: 0%;
+    }
+    .header-name {
+        font-size: 12px;
+    }
+    /* navbar */
+    .nav-fixed .nav-content{
+        /*width: 100%;*/
+        width: 375px;
+    }
+    .nav-scroll {
+        white-space: nowrap; /* All items a forced onto a single line, causing the overflow when necessary */
+        overflow-x: auto; /* Automatic overflow means a scroll bar won’t be present if it isn’t needed */
+        -webkit-overflow-scrolling: touch; /* Make it smooth scrolling on iOS devices before */
+        -ms-overflow-style: -ms-autohiding-scrollbar; /* Hide the ugly scrollbars in Edge until the scrollable area is hovered */
+    }
+    .nav-scroll::-webkit-scrollbar {
+        display: none; /* Hide the scroll bar in WebKit browsers */
+    }
+    .nav-menu {
+        padding: 0 5px;
+        margin: 0;
+        font-size: 16px;
+    }
+    .nav-menu li {
+        padding: 5px 0;
+    }
+    .nav-menu a, .header-box-right a {
+        margin: 1px 2px;
+        padding: 3px 7px;
+    }
+    /* main */
+    .formbtn-search {
+        font-size: 14px;
+        padding: 10px;
+        margin: 2px 0 0 0;
+    }
+    .form-search p {
+        text-align: left;
+        font-size: 16px;
+    }
+    .form-search {
+        padding: 8px;
+        border-radius: 10px;
+        width: 350px;
+    }
+    .form-search input, .form-search button {
+        border-radius: 5px;
+    }
+    .form-container input[type=search-text]{
+        width: 170px;
+        padding: 10px;
+        margin: 5px 0 0 0;
+    }
+    /* footer */
+    .footer-content {
+        padding: 2px 5px;
+        margin: 0 auto;
+        font-size: 10px;
+    }
+    .footer-box a, .footer-box div{
+        font-size: 10px;
+    }
+    /*.footer-box-right {
+        margin-left: 10%;
+    }
+    */
+}
+/* убирает задний фон, если его не достаточно чтобы покрыть экран */
+@media (min-height: 980px) {
+    body {
+        background-image: none;
+    }
+}

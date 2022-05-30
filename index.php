@@ -1,74 +1,270 @@
 <!DOCTYPE html> 
-<html lang="en2">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- CSS -->
-        <link rel="stylesheet" href="css/style.css">
-        <!-- Bootstrap CSS -->
-        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"> -->
-        <link href="/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <title>Главная</title>
-    </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Главная</title>
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
     <body>
-
-      <?php 
-        if($_COOKIE['user'] == ''): //если нет cookie, открывается форма авторизации
+      <?php
+        //error_reporting(0);
+        if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
       ?>
         <!-- форма авторизации -->
-        <div class="form modal1">
-          <form class="form-horizontal" role="form" action="validation-form/validation.php" method="POST">
-            <div class="form-group style1">
-              <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">Логин</label>
-                <div>
-                  <input type="text" class="form-control" placeholder="Логин" name="login">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Пароль</label>
-                <div>
-                  <input type="password" class="form-control" placeholder="Пароль" name="password">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="not_attach_ip" class="azuretext"> Запомнить пароль (не безопасно)
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="flexcenter">
-                  <button type="submit" class="btn btn-default">Войти</button>
-                </div>
-              </div>
-            </div>  
-          </form>
+        <?php
+          if($_COOKIE['error'] == 'wrongpass'): //если пароль был неправильно введен выводится алертбокс
+        ?>
+        <div class="errorbox">
+          Неверный логин или пароль
         </div>
+        <?php
+          setcookie('error', 0, time() - 3600, "/");  
+          endif;
+        ?>
+        <login-form>
+          <div class="main-content, center">
+              <form role="form" method="POST" action="php/login.php">
+                  <div class="form-container form-login">
+                      <label for="login"><b>Логин</b></label>
+                      <input type="login" placeholder="Введите логин" name="login" id="login" required>
+                      <label for="password"><b>Пароль</b></label>
+                      <input type="password" placeholder="Введите пароль" name="password" id="password" required>
+                      <button type="submit" class="formbtn-login">Войти</button>
+                  </div>
+              </form>
+          </div>
+        </login-form> 
       <?php
         else: //если есть cookie открывается главная страница web-сервиса
+
+
+        //error_reporting(E_ALL);
+        //ini_set("display_errors", 1);
+        $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+        if (!$link) {
+            echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+            exit;
+        }
+        if ($link) {
+          $worker_id = filter_var(trim($_COOKIE["worker_id"]),FILTER_SANITIZE_STRING);
+          $result = $link->query("SELECT * FROM `workers` WHERE `worker_id` = '$worker_id'");
+          $worker = $result->fetch_assoc();
+          $worker_name = $worker['worker_name'];
+          $worker_role = $worker['role'];
+          //echo json_encode($worker, JSON_UNESCAPED_UNICODE);
+        }
+          //$worker_name = $row["name"];
+          //$worker_role = $row["role"];            
       ?>
         <!-- главная страница -->
-        <div class="header">    
-          <ul class="nav col-12 col-md-auto justify-content-center mb-md-0 style6">
-            <li><img class="style4" src="images/logo_placeholder.png" width="55" height="55"></li>
-            <!--<li class="style1"><a href="#" class="nav-link px-2 link-dark">LOGO</a></li>-->
-            <li class="style2 style7"><a href="#" class="nav-link px-2 link-dark headertext">Склад</a></li>
-            <li class="style2 style7"><a href="#" class="nav-link px-2 link-dark headertext">Заказы</a></li>
-            <li class="style2 style7"><a href="#" class="nav-link px-2 link-dark headertext">Информация</a></li>
-             <li class="style7"><a href="exit.php" class="nav-link px-2 link-dark headertext">Выйти</a></li>
-          </ul>
-        </div>
-        <img class="modal1" src="images/logo_placeholder.png" width="250" height="250">
-        <div class="footer col-12">
-          <ul class="nav col-12 col-md-auto justify-content-center mb-md-0">
-          <li class="style2 style7"><a href="#" class="style3 nav-link px-2 footertext">Техподдержка: +(ХХХ) ХХХ-ХХ-ХХ<br>Менеджер: +(ХХХ) ХХХ-ХХ-ХХ</a></li>
-          <li class="style7"><img class="px-2 style5" src="images/logo_placeholder.png" width="55" height="55" alt="Пример"></li>
-          <!--<li class="style1"><a href="#" class="nav-link px-2 style2">LOGO</a></li>-->
-          </ul>
+        <div class="container contain" id="container">
+          <header id="header">
+              <img src="images/logo_wide.png" class="logo"/>
+              <h1>Книги для всей семьи!</h1>
+              <div class="header-worker">
+                <div class="header-box-left"><a href="XXX.php" class="header-name"><?php echo $worker_name; ?> — <?php echo $worker_role; ?></a></div>
+                <div class="header-box-right"><a href="php/exit.php" class="logout">Выйти</a></div>
+              </div>
+          </header>
+          <nav id="nav">
+            <div class="nav-content nav-scroll">
+              <ul class="nav-menu">
+                <li><a href="/" class="current">Склад</a></li>
+                <li><a href="supplies.php">Приемка товара</a></li>
+                <li><a href="consumption.php">Расход</a></li>
+                <li><a href="orders.php">Заказы</a></li>
+                <li><a href="reporting.php">Отчетность</a></li>
+                <li><a href="info.php">Инфо</a></li>
+              </ul>
+            </div>
+          </nav>
+          <main>
+            <div class="main-content">
+              <form role="form" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+                  <div class="form-container form-search">
+                    <p>Искать по
+                      <select name="serach-type" id="serach-type">
+                        <option selected value="code">Артикулу</option>
+                        <option value="product_name">Наименованию</option>
+                        <option value="barcode">Штрихкоду</option>                     
+                      </select>
+                    </p>
+                    <input type="search-text" placeholder="" name="search-text" id="search-text">
+                    <button type="submit" name="btn_stock" id="btn_stock" class="formbtn-search">Поиск</button>
+                    <button type="submit" name="btn_reset" id="btn_reset" class="formbtn-search">Сброс</button>
+                    <!--<button type="button" id="saveForm" onclick="getfilms()">Поиск</button>-->
+                    <!--<button type="submit" class="formbtn">Войти</button>-->
+                  </div>
+                  <?php
+                      function btn_stock_function()
+                      {
+                        $serachtype = filter_input(INPUT_POST, 'serach-type', FILTER_SANITIZE_STRING);
+                        $stocksearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
+                        setcookie('serachtype', $serachtype, time() + 3600, "/");
+                        setcookie('stocksearchtext', $stocksearchtext, time() + 3600, "/");
+                        header('location: /');
+                      }
+                      if(array_key_exists('btn_stock',$_POST)){
+                        btn_stock_function();
+                      }
+                      function btn_reset()
+                      {
+                        setcookie('serachtype', $serachtype, time() - 3600, "/");
+                        setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
+                        eader('location: /');
+                      }
+                      if(array_key_exists('btn_reset',$_POST)){
+                        btn_stock_function();
+                      }
+                    ?>
+              </form>
+              <div class="table-container">
+                <table>
+                    <tr>
+                      <th>№</th>
+                      <th>Артикул</th>
+                      <th>Штрихкод</th>
+                      <th>Наименование</th>
+                      <th>Издатель</th>
+                      <th>Год издания</th>
+                      <th>Автор</th>
+                      <th>Жанр</th>
+                      <th>Цена продажи</th>
+                      <th>Кол-во на складе</th>
+                    </tr>
+                    <?php
+                      if($_COOKIE['stocksearchtext'] == '') {                     
+                        $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+                        if (!$link) {
+                            echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+                            exit;
+                        }
+                        if ($link) {
+                          $sql = "SELECT products.*, publishers.publisher_name, group_concat(genres.genre_name), authors.author_name, stock.stock_quantity
+                                  FROM products
+                                  LEFT JOIN publishers
+                                  ON publishers.publisher_id=products.publisher_id
+                                  LEFT JOIN products_genres
+                                  ON products_genres.product_id=products.product_id
+                                  LEFT JOIN genres 
+                                  ON genres.genre_id=products_genres.genre_id
+                                  LEFT JOIN products_authors 
+                                  ON products_authors.product_id=products.product_id
+                                  LEFT JOIN authors
+                                  ON authors.author_id=products_authors.author_id
+                                  LEFT JOIN stock
+                                  ON stock.stock_id=products.product_id
+                                  GROUP BY products.product_id, products_authors.author_id";
+                          //Отобразить данные из БД на web-странице в виде таблицы
+                          if($result = $link->query($sql)) {
+                              foreach($result as $row) {//тут данные из таблицы в бд вносятся в таблицу на html страницу
+                              echo "<tr>";
+                              echo "<td>".$row["product_id"]."</td>";
+                              echo "<td>".$row["code"]."</td>";
+                              echo "<td>".$row["barcode"]."</td>";
+                              echo "<td>".$row["product_name"]."</td>";
+                              echo "<td>".$row["publisher_name"]."</td>";
+                              echo "<td>".$row["year_of_publishing"]."</td>";
+                              echo "<td>".$row["author_name"]."</td>";
+                              echo "<td>".$row["group_concat(genres.genre_name)"]."</td>";
+                              echo "<td>".$row["sell_price"]." ₽</td>";
+                              echo "<td>".$row["stock_quantity"]." Шт.</td>";
+                              echo "</tr>"; 
+                              }
+                          }
+                            echo "</table> ";
+                        }
+                      }
+                      else {
+                        $serachtype = $_COOKIE['serachtype'];
+                        $stocksearchtext =  $_COOKIE['stocksearchtext'];
+                        $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+                        if (!$link) {
+                            echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+                            exit;
+                        }
+                        if ($link) {
+                          $sql = "SELECT products.*, publishers.publisher_name, group_concat(genres.genre_name), authors.author_name, stock.stock_quantity
+                                  FROM products
+                                  LEFT JOIN publishers
+                                  ON publishers.publisher_id=products.publisher_id
+                                  LEFT JOIN products_genres
+                                  ON products_genres.product_id=products.product_id
+                                  LEFT JOIN genres 
+                                  ON genres.genre_id=products_genres.genre_id
+                                  LEFT JOIN products_authors 
+                                  ON products_authors.product_id=products.product_id
+                                  LEFT JOIN authors
+                                  ON authors.author_id=products_authors.author_id
+                                  LEFT JOIN stock
+                                  ON stock.stock_id=products.product_id
+                                  WHERE $serachtype like '%$stocksearchtext%'
+                                  GROUP BY products.product_id, products_authors.author_id";
+                          //Отобразить данные из БД на web-странице в виде таблицы
+                          if($result = $link->query($sql)) {
+                              foreach($result as $row) {//тут данные из таблицы в бд вносятся в таблицу на html страницу
+                              echo "<tr>";
+                              echo "<td>".$row["product_id"]."</td>";
+                              echo "<td>".$row["code"]."</td>";
+                              echo "<td>".$row["barcode"]."</td>";
+                              echo "<td>".$row["product_name"]."</td>";
+                              echo "<td>".$row["publisher_name"]."</td>";
+                              echo "<td>".$row["year_of_publishing"]."</td>";
+                              echo "<td>".$row["author_name"]."</td>";
+                              echo "<td>".$row["group_concat(genres.genre_name)"]."</td>";
+                              echo "<td>".$row["sell_price"]." ₽</td>";
+                              echo "<td>".$row["stock_quantity"]." Шт.</td>";
+                              echo "</tr>"; 
+                              }
+                          }
+                            echo "</table> ";
+                        }
+                      }
+                    ?>
+                </table>
+              </div>
+            </div>
+          </main>
+          <footer>
+            <div class="footer-content">
+              <!--
+              <div class="footer-box">
+                <h4>Контактная Информация</h4>
+                <a href="https://2gis.ru/surgut/firm/5489290326876712">г. Сургут ул. Маяковского, 14</a><br>
+                <a href="mailto:surgut@pm-tipograf.ru">surgut@pm-tipograf.ru</a><br>
+                <a href="tel:+73462375540">+7 (3462) 37-55-40</a>
+              </div>
+              -->
+              <div class="footer-box footer-box-right">
+                <h4>О разработчике</h4>
+                <div>Разработано Анисимовым Максимом</div>
+                <div>Компания Печатный Мир г. Сургут</div>
+              </div>
+            </div>
+          </footer>
+          <script>
+            // скрипт для липкой навигации
+            $(document).ready(function () {
+                const nav = $('#nav');
+                const navOffset = nav.offset().top;
+                const navHeight = nav.height();
+                $(window).scroll(function(){
+                    const scrolled = $(this).scrollTop();
+                    if (scrolled > navOffset) {
+                        $('#container').addClass('nav-fixed');
+                        $('#header').css({marginBotton: navHeight});
+                    }
+                    else if (scrolled < navOffset) {
+                        $('#container').removeClass('nav-fixed');
+                        $('#header').css({marginBotton: 0});
+                    }
+                });
+            });
+          </script>
         </div>
       <?php
         endif;
