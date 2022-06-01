@@ -11,6 +11,7 @@
 </head>
     <body>
       <?php
+        setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
         //error_reporting(0);
         if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
       ?>
@@ -40,8 +41,6 @@
         </login-form> 
       <?php
         else: //если есть cookie открывается главная страница web-сервиса
-
-
         //error_reporting(E_ALL);
         //ini_set("display_errors", 1);
         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
@@ -56,9 +55,7 @@
           $worker_name = $worker['worker_name'];
           $worker_role = $worker['role'];
           //echo json_encode($worker, JSON_UNESCAPED_UNICODE);
-        }
-          //$worker_name = $row["name"];
-          //$worker_role = $row["role"];            
+        }          
       ?>
         <!-- главная страница -->
         <div class="container contain" id="container">
@@ -66,7 +63,7 @@
               <img src="images/logo_wide.png" class="logo"/>
               <h1>Книги для всей семьи!</h1>
               <div class="header-worker">
-                <div class="header-box-left"><a href="XXX.php" class="header-name"><?php echo $worker_name; ?> — <?php echo $worker_role; ?></a></div>
+                <div class="header-box-left"><a href="" class="header-name"><?php echo $worker_name; ?> — <?php echo $worker_role; ?></a></div>
                 <div class="header-box-right"><a href="php/exit.php" class="logout">Выйти</a></div>
               </div>
           </header>
@@ -85,19 +82,17 @@
           <main>
             <div class="main-content">
               <form role="form" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
-                  <div class="form-container form-search">
+                  <div class="form-container form-search form-search-two-buttons">
                     <p>Искать по
                       <select name="serach-type" id="serach-type">
                         <option selected value="code">Артикулу</option>
                         <option value="product_name">Наименованию</option>
-                        <option value="barcode">Штрихкоду</option>                     
+                        <option value="barcode">Штрихкоду</option>
                       </select>
                     </p>
                     <input type="search-text" placeholder="" name="search-text" id="search-text">
                     <button type="submit" name="btn_stock" id="btn_stock" class="formbtn-search">Поиск</button>
                     <button type="submit" name="btn_reset" id="btn_reset" class="formbtn-search">Сброс</button>
-                    <!--<button type="button" id="saveForm" onclick="getfilms()">Поиск</button>-->
-                    <!--<button type="submit" class="formbtn">Войти</button>-->
                   </div>
                   <?php
                       function btn_stock_function()
@@ -122,7 +117,7 @@
                       }
                     ?>
               </form>
-              <div class="table-container">
+              <div class="table-container table-scroll">
                 <table>
                     <tr>
                       <th>№</th>
@@ -161,9 +156,11 @@
                                   GROUP BY products.product_id, products_authors.author_id";
                           //Отобразить данные из БД на web-странице в виде таблицы
                           if($result = $link->query($sql)) {
+                              $count=1;
                               foreach($result as $row) {//тут данные из таблицы в бд вносятся в таблицу на html страницу
                               echo "<tr>";
-                              echo "<td>".$row["product_id"]."</td>";
+                              echo "<td>".$count."</td>";
+                              $count=$count+1;
                               echo "<td>".$row["code"]."</td>";
                               echo "<td>".$row["barcode"]."</td>";
                               echo "<td>".$row["product_name"]."</td>";
@@ -206,9 +203,11 @@
                                   GROUP BY products.product_id, products_authors.author_id";
                           //Отобразить данные из БД на web-странице в виде таблицы
                           if($result = $link->query($sql)) {
+                              $count=1;
                               foreach($result as $row) {//тут данные из таблицы в бд вносятся в таблицу на html страницу
                               echo "<tr>";
-                              echo "<td>".$row["product_id"]."</td>";
+                              echo "<td>".$count."</td>";
+                              $count=$count+1;
                               echo "<td>".$row["code"]."</td>";
                               echo "<td>".$row["barcode"]."</td>";
                               echo "<td>".$row["product_name"]."</td>";
@@ -240,7 +239,7 @@
               </div>
               -->
               <div class="footer-box footer-box-right">
-                <h4>О разработчике</h4>
+                <!--<h4>О разработчике</h4>-->
                 <div>Разработано Анисимовым Максимом</div>
                 <div>Компания Печатный Мир г. Сургут</div>
               </div>

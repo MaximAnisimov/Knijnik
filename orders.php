@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
     <body>
-    <?php
+      <?php
+        setcookie('serachtype', $serachtype, time() - 3600, "/");
+        setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
         //error_reporting(0);
         if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
       ?>
@@ -40,10 +42,6 @@
         </login-form> 
       <?php
         else: //если есть cookie открывается главная страница web-сервиса
-
-
-        //error_reporting(E_ALL);
-        //ini_set("display_errors", 1);
         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
         if (!$link) {
             echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
@@ -55,10 +53,7 @@
           $worker = $result->fetch_assoc();
           $worker_name = $worker['worker_name'];
           $worker_role = $worker['role'];
-          //echo json_encode($worker, JSON_UNESCAPED_UNICODE);
-        }
-          //$worker_name = $row["name"];
-          //$worker_role = $row["role"];            
+        }           
       ?>
         <!-- главная страница -->
         <div class="container contain" id="container">
@@ -89,25 +84,79 @@
                     <p>Введите номер заказа
                     </p>
                     <input type="search-text" placeholder="" name="search-text" id="search-text" required>
-                    <button type="submit" class="formbtn-search">Поиск</button>
-                    <!--<button type="button" id="saveForm" onclick="getfilms()">Поиск</button>-->
-                    <!--<button type="submit" class="formbtn">Войти</button>-->
+                    <button type="submit" name="btn_order" id="btn_order" class="formbtn-search">Поиск</button>
                   </div>
+                  <?php
+                      function btn_order_function()
+                      {
+                        $ordersearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
+                        setcookie('ordersearchtext', $ordersearchtext, time() + 5, "/");
+                        header("Refresh:0");
+                      }
+                      if(array_key_exists('btn_order',$_POST)){
+                        btn_order_function();
+                      }
+                    ?>
               </form>
+                    <?php
+                      if($_COOKIE['ordersearchtext'] == '') {
+                      }
+                      else {
+                        echo '<div class="table-container table-scroll"> 
+                                <table>
+                                  <tr>
+                                    <th>№</th>
+                                    <th>Артикул</th>
+                                    <th>Штрихкод</th>
+                                    <th>Наименование</th>
+                                    <th>Цена за Шт.</th>
+                                    <th>Кол-во</th>
+                                    <th>Стоимость</th>
+                                  </tr>';
+                        $serachtype = $_COOKIE['serachtype'];
+                        $ordersearchtext =  $_COOKIE['ordersearchtext'];
+                        $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+                        if (!$link) {
+                            echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+                            exit;
+                        }
+                        if ($link) {
+                          $sql = "SELECT orders.order_number, orders.order_quantity, products.code,  products.barcode, products.product_name, products.sell_price
+                                  FROM orders
+                                  LEFT JOIN products
+                                  ON products.product_id=orders.product_id
+                                  WHERE order_number=$ordersearchtext";
+                          //Отобразить данные из БД на web-странице в виде таблицы
+                          if($result = $link->query($sql)) {
+                              $count=1;
+                              $totalcost=0;
+                              foreach($result as $row) {//тут данные из таблицы в бд вносятся в таблицу на html страницу
+                              echo "<tr>";
+                              echo "<td>".$count."</td>";
+                              $count=$count+1;
+                              echo "<td>".$row["code"]."</td>";
+                              echo "<td>".$row["barcode"]."</td>";
+                              echo "<td>".$row["product_name"]."</td>";
+                              echo "<td>".$row["sell_price"]." ₽</td>";
+                              echo "<td>".$row["order_quantity"]."</td>";
+                              $cost=$row["sell_price"]*$row["order_quantity"];
+                              $totalcost=$totalcost+$cost;
+                              echo "<td>".$cost.".00 ₽</td>";
+                              echo "</tr>"; 
+                              }
+                          }
+                            echo "</table> ";
+                            echo "</div>";
+                            echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>';
+                        }
+                      }
+                    ?>
             </div>
           </main>
           <footer>
             <div class="footer-content">
-              <!--
-              <div class="footer-box">
-                <h4>Контактная Информация</h4>
-                <a href="https://2gis.ru/surgut/firm/5489290326876712">г. Сургут ул. Маяковского, 14</a><br>
-                <a href="mailto:surgut@pm-tipograf.ru">surgut@pm-tipograf.ru</a><br>
-                <a href="tel:+73462375540">+7 (3462) 37-55-40</a>
-              </div>
-              -->
               <div class="footer-box footer-box-right">
-                <h4>О разработчике</h4>
+                <!--<h4>О разработчике</h4>-->
                 <div>Разработано Анисимовым Максимом</div>
                 <div>Компания Печатный Мир г. Сургут</div>
               </div>
@@ -136,10 +185,5 @@
       <?php
         endif;
       ?>
-
-      <!-- Optional JavaScript; Bootstrap Bundle with Popper
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-      -->
-      <!--  <script src="/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     </body>
 </html>

@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
     <body>
-    <?php
+      <?php
+        setcookie('serachtype', $serachtype, time() - 3600, "/");
+        setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
         //error_reporting(0);
         if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
       ?>
@@ -40,8 +42,6 @@
         </login-form> 
       <?php
         else: //если есть cookie открывается главная страница web-сервиса
-
-
         //error_reporting(E_ALL);
         //ini_set("display_errors", 1);
         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
@@ -96,7 +96,7 @@
               </div>
               -->
               <div class="footer-box footer-box-right">
-                <h4>О разработчике</h4>
+                <!--<h4>О разработчике</h4>-->
                 <div>Разработано Анисимовым Максимом</div>
                 <div>Компания Печатный Мир г. Сургут</div>
               </div>

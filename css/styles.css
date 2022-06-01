@@ -1,20 +1,5 @@
-.palitre {
-    color:#145e63; /*темно-зеленый*/
-    color: #c6c6c6; /*светло-серый*/
-    color: #a1b1b0; /*зелено-серый*/
-    color: #f3ece1; /*серо-желтый*/
-    color: #ffffff; /*белый*/
-    color: #313131; /*черный*/
-}
-/*
-https://intop24.ru/article_15_lesson_4.php
-https://ru.stackoverflow.com/questions/284297/%D0%92%D1%8B%D0%B2%D0%B5%D1%81%D1%82%D0%B8-%D0%B8%D0%B7-%D0%B1%D0%B0%D0%B7%D1%8B-mysql-%D0%B2-%D0%B2%D0%B8%D0%B4%D0%B5-json-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B0
-https://www.php.net/manual/ru/book.session.php
-при отсутсвии кукки возвращать на главную страницу
-json_encode
-*/
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
-@import url('http://fonts.cdnfonts.com/css/gotham-pro');
+@import url('http://fonts.cdnfonts.com/css/gotham-pro?styles=24950');
 * {
     box-sizing: border-box;
     /*position: relative;*/
@@ -173,7 +158,7 @@ header h1 {
     color: #cccccc;
 }
 .header-box-right{
-    margin-left: 25%;
+    margin-left: 15%;
 }
 .header-box-right a{
     border-radius: 3px;
@@ -237,7 +222,7 @@ header h1 {
 /**/
 /* main */
 main {
-    min-height: 100vh;
+    min-height: calc(100vh - 282px);/*100%-высота хедера, навигации и футера (всех остальных блоков)*/
     /*min-height: 100vh;
     min-height: 2000px;
     width: 100%;*/
@@ -270,6 +255,9 @@ main h1 {
     padding: 16px;
     background-color: #8795a3;
     border-radius: 10px;
+    width: 347px;
+}
+.form-search-two-buttons {
     width: 424px;
 }
 .form-search input, .form-search button {
@@ -305,7 +293,7 @@ main h1 {
 .table-container th {
     padding: 2px 12px;
     background-color: #8795a3;
-    /*height: 68px;*/
+    height: 68px;
 }
 .table-container td {
     padding: 3px;
@@ -314,6 +302,15 @@ main h1 {
     text-align: center;
     align-content: center;
     border: 1px solid #364657;
+}
+.order-message {
+    font-size: 22px;
+    padding: 3px;
+    margin: 0 auto;
+    margin-top: 16px;
+    width: 220px;
+    border-radius: 10px;
+    background-color: #8795a3;
 }
 /**/
 /* footer */
@@ -406,7 +403,7 @@ footer {
         margin-left: 0%;
     }
     .header-name {
-        font-size: 12px;
+        font-size: 11px;
     }
     /* navbar */
     .nav-fixed .nav-content{
@@ -435,6 +432,12 @@ footer {
         padding: 3px 7px;
     }
     /* main */
+    main {
+        min-height: calc(100vh - 182px);
+    }
+    .main-content {
+        padding: 8px;
+    }
     .formbtn-search {
         font-size: 14px;
         padding: 10px;
@@ -447,7 +450,10 @@ footer {
     .form-search {
         padding: 8px;
         border-radius: 10px;
-        width: 350px;
+        width: 250px;
+    }
+    .form-search-two-buttons {
+        width: 315px;
     }
     .form-search input, .form-search button {
         border-radius: 5px;
@@ -456,6 +462,43 @@ footer {
         width: 170px;
         padding: 10px;
         margin: 5px 0 0 0;
+    }
+    .table-scroll {
+        /*white-space: nowrap; /* All items a forced onto a single line, causing the overflow when necessary */
+        overflow-x: auto; /* Automatic overflow means a scroll bar won’t be present if it isn’t needed */
+        -webkit-overflow-scrolling: touch; /* Make it smooth scrolling on iOS devices before */
+        -ms-overflow-style: -ms-autohiding-scrollbar; /* Hide the ugly scrollbars in Edge until the scrollable area is hovered */
+    }
+    .table-scroll::-webkit-scrollbar {
+        display: none; /* Hide the scroll bar in WebKit browsers */
+    }
+    .table-container {
+        /*margin: 0 auto;*/
+        margin-top: 8px;
+        font-size: 16px;
+        /*max-width: 1400px;*/
+    }
+    .table-container table {
+        /*margin-left: auto;*/
+        /*margin-right: auto;*/
+        /*table-layout: fixed;*/
+        /*width: 300px;*/
+        /*width: 100%;*/
+    }
+    .table-container th {
+        padding: 2px 6px;
+        height: 30px;
+    }
+    .table-container td {
+        padding: 2px;
+    }
+    .order-message {
+        font-size: 18px;
+        padding: 2px;
+        margin: 0 auto;
+        margin-top: 8px;
+        width: 200px;
+        border-radius: 10px;
     }
     /* footer */
     .footer-content {
