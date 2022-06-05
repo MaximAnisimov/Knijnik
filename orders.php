@@ -13,35 +13,9 @@
       <?php
         setcookie('serachtype', $serachtype, time() - 3600, "/");
         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
-        //error_reporting(0);
-        if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
-      ?>
-        <!-- форма авторизации -->
-        <?php
-          if($_COOKIE['error'] == 'wrongpass'): //если пароль был неправильно введен выводится алертбокс
-        ?>
-        <div class="errorbox">
-          Неверный логин или пароль
-        </div>
-        <?php
-          setcookie('error', 0, time() - 3600, "/");  
-          endif;
-        ?>
-        <login-form>
-          <div class="main-content, center">
-              <form role="form" method="POST" action="php/login.php">
-                  <div class="form-container form-login">
-                      <label for="login"><b>Логин</b></label>
-                      <input type="login" placeholder="Введите логин" name="login" id="login" required>
-                      <label for="password"><b>Пароль</b></label>
-                      <input type="password" placeholder="Введите пароль" name="password" id="password" required>
-                      <button type="submit" class="formbtn-login">Войти</button>
-                  </div>
-              </form>
-          </div>
-        </login-form> 
-      <?php
-        else: //если есть cookie открывается главная страница web-сервиса
+        if($_COOKIE['worker_id'] == ''): //если нет cookie   
+          header('location: /');
+        else: //если есть cookie
         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
         if (!$link) {
             echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
@@ -55,7 +29,7 @@
           $worker_role = $worker['role'];
         }           
       ?>
-        <!-- главная страница -->
+        <!-- страница заказы -->
         <div class="container contain" id="container">
           <header id="header">
               <img src="images/logo_wide.png" class="logo"/>
@@ -156,7 +130,6 @@
           <footer>
             <div class="footer-content">
               <div class="footer-box footer-box-right">
-                <!--<h4>О разработчике</h4>-->
                 <div>Разработано Анисимовым Максимом</div>
                 <div>Компания Печатный Мир г. Сургут</div>
               </div>

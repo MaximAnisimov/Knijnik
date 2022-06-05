@@ -142,7 +142,7 @@ header h1 {
 .header-worker {
     background-color: #8795a3;
     list-style: none;
-    padding: 0 30px;
+    padding: 5px 30px;
     margin: 0;
     font-size: 18px;
     text-align: center;
@@ -159,10 +159,6 @@ header h1 {
 }
 .header-box-right{
     margin-left: 15%;
-}
-.header-box-right a{
-    border-radius: 3px;
-    background: #364657;
 }
 /**/        
 /* nav */
@@ -199,7 +195,7 @@ header h1 {
     display: inline-block;
     padding: 5px 0;
 }
-.nav-menu a , .header-box-right a{
+.nav-menu a {
     text-decoration: none;
     display: inline-block;
     margin: 2px 5px;
@@ -208,12 +204,21 @@ header h1 {
     border-bottom: 1px solid transparent;
     transition: .3s linear;
 }
-.nav-menu .current, .nav-menu a:hover, .logout-box a:hover {
+.nav-menu .current, .nav-menu a:hover {
     border-radius: 3px;
     background: #cccccc;
     color: #313131;
     text-shadow: 0 1px 0 #f3ece1;
     border-color: #c6c6c6;
+}
+.logout {
+    text-decoration: none;
+    font-size: 18px;
+    background-color: #364657;
+    color: #cccccc;
+    padding: 5px;
+    margin: 5px 0 0 0;
+    border-radius: 3px;
 }
 /* отдельный стиль для кнопки войти/выйти? 
 .nav-menu .login, .nav-menu .logout {
@@ -222,7 +227,7 @@ header h1 {
 /**/
 /* main */
 main {
-    min-height: calc(100vh - 282px);/*100%-высота хедера, навигации и футера (всех остальных блоков)*/
+    min-height: calc(100vh - 275px);/*100%-высота хедера, навигации и футера (всех остальных блоков)*/
     /*min-height: 100vh;
     min-height: 2000px;
     width: 100%;*/
@@ -392,7 +397,7 @@ footer {
         font-size: 22px
     }
     .header-worker {
-        padding: 0 5px;
+        padding: 2px 5px;
         margin: 0;
         font-size: 16px;
     }    
@@ -404,6 +409,12 @@ footer {
     }
     .header-name {
         font-size: 11px;
+    }
+    .logout {
+        font-size: 14px;
+        padding: 5px;
+        margin: 2px 0 0 0;
+        border-radius: 3px;
     }
     /* navbar */
     .nav-fixed .nav-content{
@@ -427,13 +438,13 @@ footer {
     .nav-menu li {
         padding: 5px 0;
     }
-    .nav-menu a, .header-box-right a {
+    .nav-menu a {
         margin: 1px 2px;
         padding: 3px 7px;
     }
     /* main */
     main {
-        min-height: calc(100vh - 182px);
+        min-height: calc(100vh - 177px);
     }
     .main-content {
         padding: 8px;

@@ -11,7 +11,8 @@
 </head>
     <body>
       <?php
-        setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+        setcookie('serachtype', $serachtype, time() - 3600, "/");
+        setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
         //error_reporting(0);
         if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
       ?>
@@ -23,7 +24,7 @@
           Неверный логин или пароль
         </div>
         <?php
-          setcookie('error', 0, time() - 3600, "/");  
+          setcookie('error', 0, time() - 3600, "/");
           endif;
         ?>
         <login-form>
@@ -120,25 +121,62 @@
               <div class="table-container table-scroll">
                 <table>
                     <tr>
-                      <th>№</th>
-                      <th>Артикул</th>
-                      <th>Штрихкод</th>
-                      <th>Наименование</th>
-                      <th>Издатель</th>
-                      <th>Год издания</th>
-                      <th>Автор</th>
-                      <th>Жанр</th>
-                      <th>Цена продажи</th>
-                      <th>Кол-во на складе</th>
+                      <th><a>№</a></th>
+                      <th><a>Артикул</a></th>
+                      <th><a>Штрихкод</a></th>
+                      <th><a>Наименование</a></th>
+                      <th><a>Издатель</a></th>
+                      <th><a>Год издания</a></th>
+                      <th><a>Автор</a></th>
+                      <th><a>Жанр</a></th>
+                      <th><a>Цена продажи</a></th>
+                      <th><a>Кол-во на складе</a></th>
                     </tr>
                     <?php
-                      if($_COOKIE['stocksearchtext'] == '') {                     
+                      if($_COOKIE['stocksearchtext'] == '') {
                         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
                         if (!$link) {
                             echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
                             exit;
                         }
                         if ($link) {
+                          $sort_list = array(
+                            'code_asc'   => '`code`',
+                            'code_desc'  => '`code` DESC',
+                            'barcode_asc'  => '`barcode`',
+                            'barcode_desc' => '`barcode` DESC',
+                            'product_name_asc'   => '`product_name`',
+                            'product_name_desc'  => '`product_name` DESC',
+                            'publisher_name_asc'   => '`publisher_name`',
+                            'publisher_name_desc'  => '`publisher_name` DESC',
+                            'year_of_publishing_asc'   => '`year_of_publishing`',
+                            'year_of_publishing_desc'  => '`year_of_publishing` DESC',
+                            'author_name_asc'   => '`author_name`',
+                            'author_name_desc'  => '`author_name` DESC',
+                            'group_concat(genres.genre_name)_asc'   => '`group_concat(genres.genre_name)`',
+                            'group_concat(genres.genre_name)_desc'  => '`group_concat(genres.genre_name)` DESC',
+                            'sell_price_asc'   => '`sell_price`',
+                            'sell_price_desc'  => '`sell_price` DESC',
+                            'stock_quantity_asc'   => '`stock_quantity`',
+                            'stock_quantity_desc'  => '`stock_quantity` DESC',
+                          );
+                          $sort = @$_GET['sort'];
+                          if (array_key_exists($sort, $sort_list)) {
+                            $sort_sql = $sort_list[$sort];
+                          } 
+                          else {
+                            $sort_sql = reset($sort_list);
+                          }
+                          function sort_link_th($title, $a, $b) {
+                            $sort = @$_GET['sort'];
+                            if ($sort == $a) {
+                              return '<a class="active" href="?sort=' . $b . '">' . $title . ' <i>▲</i></a>';
+                            } elseif ($sort == $b) {
+                              return '<a class="active" href="?sort=' . $a . '">' . $title . ' <i>▼</i></a>';  
+                            } else {
+                              return '<a href="?sort=' . $a . '">' . $title . '</a>';  
+                            }
+                          }
                           $sql = "SELECT products.*, publishers.publisher_name, group_concat(genres.genre_name), authors.author_name, stock.stock_quantity
                                   FROM products
                                   LEFT JOIN publishers
@@ -153,7 +191,8 @@
                                   ON authors.author_id=products_authors.author_id
                                   LEFT JOIN stock
                                   ON stock.stock_id=products.product_id
-                                  GROUP BY products.product_id, products_authors.author_id";
+                                  GROUP BY products.product_id, products_authors.author_id
+                                  ORDER BY {$sort_sql}";
                           //Отобразить данные из БД на web-странице в виде таблицы
                           if($result = $link->query($sql)) {
                               $count=1;
@@ -185,6 +224,43 @@
                             exit;
                         }
                         if ($link) {
+                          $sort_list = array(
+                            'code_asc'   => '`code`',
+                            'code_desc'  => '`code` DESC',
+                            'barcode_asc'  => '`barcode`',
+                            'barcode_desc' => '`barcode` DESC',
+                            'product_name_asc'   => '`product_name`',
+                            'product_name_desc'  => '`product_name` DESC',
+                            'publisher_name_asc'   => '`publisher_name`',
+                            'publisher_name_desc'  => '`publisher_name` DESC',
+                            'year_of_publishing_asc'   => '`year_of_publishing`',
+                            'year_of_publishing_desc'  => '`year_of_publishing` DESC',
+                            'author_name_asc'   => '`author_name`',
+                            'author_name_desc'  => '`author_name` DESC',
+                            'group_concat(genres.genre_name)_asc'   => '`group_concat(genres.genre_name)`',
+                            'group_concat(genres.genre_name)_desc'  => '`group_concat(genres.genre_name)` DESC',
+                            'sell_price_asc'   => '`sell_price`',
+                            'sell_price_desc'  => '`sell_price` DESC',
+                            'stock_quantity_asc'   => '`stock_quantity`',
+                            'stock_quantity_desc'  => '`stock_quantity` DESC',
+                          );
+                          $sort = @$_GET['sort'];
+                          if (array_key_exists($sort, $sort_list)) {
+                            $sort_sql = $sort_list[$sort];
+                          } 
+                          else {
+                            $sort_sql = reset($sort_list);
+                          }
+                          function sort_link_th($title, $a, $b) {
+                            $sort = @$_GET['sort'];
+                            if ($sort == $a) {
+                              return '<a class="active" href="?sort=' . $b . '">' . $title . ' <i>▲</i></a>';
+                            } elseif ($sort == $b) {
+                              return '<a class="active" href="?sort=' . $a . '">' . $title . ' <i>▼</i></a>';  
+                            } else {
+                              return '<a href="?sort=' . $a . '">' . $title . '</a>';  
+                            }
+                          }
                           $sql = "SELECT products.*, publishers.publisher_name, group_concat(genres.genre_name), authors.author_name, stock.stock_quantity
                                   FROM products
                                   LEFT JOIN publishers
@@ -200,7 +276,8 @@
                                   LEFT JOIN stock
                                   ON stock.stock_id=products.product_id
                                   WHERE $serachtype like '%$stocksearchtext%'
-                                  GROUP BY products.product_id, products_authors.author_id";
+                                  GROUP BY products.product_id, products_authors.author_id
+                                  ORDER BY {$sort_sql}";
                           //Отобразить данные из БД на web-странице в виде таблицы
                           if($result = $link->query($sql)) {
                               $count=1;
