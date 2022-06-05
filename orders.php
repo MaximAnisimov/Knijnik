@@ -54,20 +54,29 @@
           <main>
             <div class="main-content">
               <form role="form" method="POST" action="">
-                  <div class="form-container form-search">
+                  <div class="form-container form-search form-search-two-buttons">
                     <p>Введите номер заказа
                     </p>
-                    <input type="search-text" placeholder="" name="search-text" id="search-text" required>
+                    <input type="search-text" placeholder="" name="search-text" id="search-text">
                     <button type="submit" name="btn_order" id="btn_order" class="formbtn-search">Поиск</button>
+                    <button type="submit" name="btn_reset" id="btn_reset" class="formbtn-search">Сброс</button>
                   </div>
                   <?php
                       function btn_order_function()
                       {
                         $ordersearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
-                        setcookie('ordersearchtext', $ordersearchtext, time() + 5, "/");
+                        setcookie('ordersearchtext', $ordersearchtext, time() + 3600, "/");
                         header("Refresh:0");
                       }
                       if(array_key_exists('btn_order',$_POST)){
+                        btn_order_function();
+                      }
+                      function btn_reset()
+                      {
+                        setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+                        eader('location: /');
+                      }
+                      if(array_key_exists('btn_reset',$_POST)){
                         btn_order_function();
                       }
                     ?>
@@ -76,55 +85,89 @@
                       if($_COOKIE['ordersearchtext'] == '') {
                       }
                       else {
-                        echo '<div class="table-container table-scroll"> 
-                                <table>
-                                  <tr>
-                                    <th>№</th>
-                                    <th>Артикул</th>
-                                    <th>Штрихкод</th>
-                                    <th>Наименование</th>
-                                    <th>Цена за Шт.</th>
-                                    <th>Кол-во</th>
-                                    <th>Стоимость</th>
-                                  </tr>';
-                        $serachtype = $_COOKIE['serachtype'];
-                        $ordersearchtext =  $_COOKIE['ordersearchtext'];
                         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
                         if (!$link) {
                             echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
                             exit;
                         }
                         if ($link) {
+                          /* Все варианты сортировки */
+                          $sort_list = array(
+                            'code_asc'   => '`code`',
+                            'code_desc'  => '`code` DESC',
+                            'barcode_asc'  => '`barcode`',
+                            'barcode_desc' => '`barcode` DESC',
+                            'product_name_asc'   => '`product_name`',
+                            'product_name_desc'  => '`product_name` DESC',
+                            'sell_price_asc'   => '`sell_price`',
+                            'sell_price_desc'  => '`sell_price` DESC',
+                            'order_quantity_asc'   => '`order_quantity`',
+                            'order_quantity_desc'  => '`order_quantity` DESC',
+                          );
+                          /* Проверка GET-переменной */
+                          $sort = @$_GET['sort'];
+                          if (array_key_exists($sort, $sort_list)) {
+                            $sort_sql = $sort_list[$sort];
+                          } 
+                          else {
+                            $sort_sql = reset($sort_list);
+                          }
+                          /*  */
+                          $serachtype = $_COOKIE['serachtype'];
+                          $ordersearchtext =  $_COOKIE['ordersearchtext'];
                           $sql = "SELECT orders.order_number, orders.order_quantity, products.code,  products.barcode, products.product_name, products.sell_price
                                   FROM orders
                                   LEFT JOIN products
                                   ON products.product_id=orders.product_id
-                                  WHERE order_number=$ordersearchtext";
-                          //Отобразить данные из БД на web-странице в виде таблицы
-                          if($result = $link->query($sql)) {
-                              $count=1;
-                              $totalcost=0;
-                              foreach($result as $row) {//тут данные из таблицы в бд вносятся в таблицу на html страницу
-                              echo "<tr>";
-                              echo "<td>".$count."</td>";
-                              $count=$count+1;
-                              echo "<td>".$row["code"]."</td>";
-                              echo "<td>".$row["barcode"]."</td>";
-                              echo "<td>".$row["product_name"]."</td>";
-                              echo "<td>".$row["sell_price"]." ₽</td>";
-                              echo "<td>".$row["order_quantity"]."</td>";
-                              $cost=$row["sell_price"]*$row["order_quantity"];
-                              $totalcost=$totalcost+$cost;
-                              echo "<td>".$cost.".00 ₽</td>";
-                              echo "</tr>"; 
-                              }
+                                  WHERE order_number=$ordersearchtext
+                                  ORDER BY $sort_sql";
+                          /* Запрос в БД */
+                          $dbh = new PDO('mysql:dbname=knizhnik_db;host=localhost', 'root', 'root');
+                          $sth = $dbh->prepare($sql);
+                          $sth->execute();
+                          $list = $sth->fetchAll(PDO::FETCH_ASSOC);
+                          /* Функция вывода ссылок */
+                          function sort_link_th($title, $a, $b) {
+                            $sort = @$_GET['sort'];
+                            if ($sort == $a) {
+                              return '<a class="active" href="?sort=' . $b . '">' . $title . ' <i>▲</i></a>';
+                            } elseif ($sort == $b) {
+                              return '<a class="active" href="?sort=' . $a . '">' . $title . ' <i>▼</i></a>';  
+                            } else {
+                              return '<a href="?sort=' . $a . '">' . $title . '</a>';  
+                            }
                           }
-                            echo "</table> ";
-                            echo "</div>";
-                            echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>';
                         }
                       }
                     ?>
+                    <?php if($_COOKIE['ordersearchtext'] == '') {
+                    } else { ?>
+                    <div class="table-container table-scroll">
+                          <table>
+                          <tr>
+                            <th>№</th>
+                            <th><?php echo sort_link_th("Артикул", "code_asc", "code_desc"); ?></th>
+                            <th><?php echo sort_link_th("Штрихкод", "barcode_asc", "barcode_desc"); ?></th>
+                            <th><?php echo sort_link_th("Наименование", "product_name_asc", "product_name_desc"); ?></th>
+                            <th><?php echo sort_link_th("Цена за Шт.", "sell_price_asc", "sell_price_desc"); ?></th>
+                            <th><?php echo sort_link_th("Кол-во", "order_quantity_asc", "order_quantity_asc_desc"); ?></th>
+                            <th>Стоимость</th>
+                          </tr>
+                          <?php $count=1; foreach ($list as $row): ?>
+                          <tr>
+                            <td><?php echo $count; $count=$count+1; ?></td>
+                            <td><?php echo $row["code"] ?></td>
+                            <td><?php echo $row["barcode"] ?></td>
+                            <td><?php echo $row["product_name"] ?></td>
+                            <td><?php echo $row["sell_price"] ?></td>
+                            <td><?php echo $row["order_quantity"] ?></td>
+                            <td><?php $cost=$row["sell_price"]*$row["order_quantity"]; $totalcost=$totalcost+$cost; echo $cost+".00 ₽" ?></td>
+                          </tr>
+                          <?php endforeach ?>
+                          </table>
+                        </div>
+                        
+                    <?php echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>'; }?>
             </div>
           </main>
           <footer>

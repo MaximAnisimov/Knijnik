@@ -13,6 +13,7 @@
       <?php
         setcookie('serachtype', $serachtype, time() - 3600, "/");
         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
+        setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
         if($_COOKIE['worker_id'] == ''): //если нет cookie   
           header('location: /');
         else: //если есть cookie
