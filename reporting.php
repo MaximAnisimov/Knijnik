@@ -14,6 +14,7 @@
         setcookie('serachtype', $serachtype, time() - 3600, "/");
         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
         setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+        setcookie('consumption_type', $consumption_type, time() - 3600, "/");
         if($_COOKIE['worker_id'] == ''): //если нет cookie   
           header('location: /');
         else: //если есть cookie
@@ -53,7 +54,47 @@
             </div>
           </nav>
           <main>
-            
+            <div class="main-content">
+              <form role="form" method="POST" action="">
+                <div class="form-container form-search form-reporting-type">
+                  <button type="submit" name="btn_reporting_type_personal" id="btn_reporting_type_personal" class="formbtn-search <?php if( $_COOKIE['reporting_type'] == 'personal') echo "formbtn-current" ?>">Личная</button>
+                  <button type="submit" name="btn_reporting_type_general" id="btn_reporting_type_general" class="formbtn-search <?php if($_COOKIE['reporting_type'] == 'general') echo "formbtn-current" ?>">Общая</button>
+                </div>
+                <?php
+                      function btn_reporting_type_personal()
+                      {
+                        setcookie('reporting_type', 'personal', time() + 3600, "/");
+                        header("Refresh:0");
+                      }
+                      if(array_key_exists('btn_reporting_type_personal',$_POST)){
+                        btn_reporting_type_personal();
+                      }
+                      function btn_reporting_type_general()
+                      {
+                        setcookie('reporting_type', 'general', time() + 3600, "/");
+                        header("Refresh:0");
+                      }
+                      if(array_key_exists('btn_reporting_type_general',$_POST)){
+                        btn_reporting_type_general();
+                      }
+                  ?>
+              </form>
+              <?php if($_COOKIE['reporting_type'] == '') {
+                } else {?>
+                <form role="form" method="POST" action="" class="padding-eight">
+                  <div class="form-container form-search form-reporting">  
+                  Выберите период
+                  <p class="ta-right">C
+                  <input type="date" name="reporting-from" id="reporting-from"></p>
+                  <p class="ta-right">по
+                  <input type="date" name="reporting-to" id="reporting-to"></p> 
+                  <button type="submit" name="btn_stock" id="btn_stock" class="formbtn-search">Отчет</button>
+                  </div>
+                  <?php
+                    ?>
+                </form>
+              <?php } ?>
+            </div>
           </main>
           <footer>
             <div class="footer-content">

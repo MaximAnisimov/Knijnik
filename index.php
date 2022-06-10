@@ -12,6 +12,8 @@
     <body>
       <?php
         setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+        setcookie('consumption_type', $consumption_type, time() - 3600, "/");
+        setcookie('reporting_type', $consumption_type, time() - 3600, "/");
         //error_reporting(0);
         if($_COOKIE['worker_id'] == ''): //если нет cookie, открывается форма авторизации
       ?>
@@ -55,7 +57,7 @@
           $worker_name = $worker['worker_name'];
           $worker_role = $worker['role'];
           //echo json_encode($worker, JSON_UNESCAPED_UNICODE);
-        }          
+        }
       ?>
         <!-- главная страница -->
         <div class="container contain" id="container">
@@ -81,7 +83,7 @@
           </nav>
           <main>
             <div class="main-content">
-              <form role="form" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+              <form role="form" method="POST" action="">
                   <div class="form-container form-search form-search-two-buttons">
                     <p>Искать по
                       <select name="serach-type" id="serach-type">
@@ -95,7 +97,7 @@
                     <button type="submit" name="btn_reset" id="btn_reset" class="formbtn-search">Сброс</button>
                   </div>
                   <?php
-                      function btn_stock_function()
+                      function btn_stock()
                       {
                         $serachtype = filter_input(INPUT_POST, 'serach-type', FILTER_SANITIZE_STRING);
                         $stocksearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
@@ -104,16 +106,16 @@
                         header('location: /');
                       }
                       if(array_key_exists('btn_stock',$_POST)){
-                        btn_stock_function();
+                        btn_stock();
                       }
                       function btn_reset()
                       {
                         setcookie('serachtype', $serachtype, time() - 3600, "/");
                         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
-                        eader('location: /');
+                        header('location: /');
                       }
                       if(array_key_exists('btn_reset',$_POST)){
-                        btn_stock_function();
+                        btn_reset();
                       }
                     ?>
               </form>
@@ -237,7 +239,7 @@
                       <td><?php echo $row["year_of_publishing"] ?></td>
                       <td><?php echo $row["author_name"] ?></td>
                       <td><?php echo $row["group_concat(genres.genre_name)"] ?></td>
-                      <td><?php echo $row["sell_price"] ?></td>
+                      <td><?php echo $row["sell_price"],' ₽' ?></td>
                       <td><?php echo $row["stock_quantity"] ?></td>
                     </tr>
                     <?php endforeach; ?>

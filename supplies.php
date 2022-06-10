@@ -14,6 +14,8 @@
         setcookie('serachtype', $serachtype, time() - 3600, "/");
         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
         setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+        setcookie('consumption_type', $consumption_type, time() - 3600, "/");
+        setcookie('reporting_type', $consumption_type, time() - 3600, "/");
         if($_COOKIE['worker_id'] == ''): //если нет cookie   
           header('location: /');
         else: //если есть cookie

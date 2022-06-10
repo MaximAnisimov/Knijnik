@@ -14,6 +14,7 @@
         setcookie('serachtype', $serachtype, time() - 3600, "/");
         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
         setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+        setcookie('reporting_type', $consumption_type, time() - 3600, "/");
         if($_COOKIE['worker_id'] == ''): //если нет cookie   
           header('location: /');
         else: //если есть cookie
@@ -53,7 +54,69 @@
             </div>
           </nav>
           <main>
-            
+            <div class="main-content">
+              <form role="form" method="POST" action="">
+                <div class="form-container form-search form-consumption-type">
+                  <button type="submit" name="btn_consumption_type_sale" id="btn_consumption_type_sale" class="formbtn-search <?php if( $_COOKIE['consumption_type'] == 'sale') echo "formbtn-current" ?>">Продажа</button>
+                  <button type="submit" name="btn_consumption_type_writeoff" id="btn_consumption_type_writeoff" class="formbtn-search <?php if($_COOKIE['consumption_type'] == 'writeoff') echo "formbtn-current" ?>">Списание</button>
+                </div>
+                <?php
+                      function btn_consumption_type_sale()
+                      {
+                        setcookie('consumption_type', 'sale', time() + 3600, "/");
+                        header("Refresh:0");
+                      }
+                      if(array_key_exists('btn_consumption_type_sale',$_POST)){
+                        btn_consumption_type_sale();
+                      }
+                      function btn_consumption_type_writeoff()
+                      {
+                        setcookie('consumption_type', 'writeoff', time() + 3600, "/");
+                        header("Refresh:0");
+                      }
+                      if(array_key_exists('btn_consumption_type_writeoff',$_POST)){
+                        btn_consumption_type_writeoff();
+                      }
+                  ?>
+              </form>
+              <?php if($_COOKIE['consumption_type'] == '') {
+                } else {?>
+                <form role="form" method="POST" action="" class="padding-eight">
+                  <div class="form-container form-search form-consumption">
+                    <p>Указать
+                      <select name="serach-type" id="serach-type">
+                        <option selected value="code">Артикул</option>
+                        <option value="product_name">Наименование</option>
+                        <option value="barcode">Штрихкод</option>
+                      </select>
+                    </p>
+                    <input type="search-text" placeholder="Идентификатор" name="search-text" id="search-text" required>
+                    <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" placeholder="Кол-во" name="search-number" id="search-number"  maxlength="3" required>
+                    <button type="submit" name="btn_consumption" id="btn_consumption" class="formbtn-search">Оформить</button>
+                  </div>
+                  <?php
+                      function btn_consumption()
+                      {
+                        $worker_id = filter_var(trim($_COOKIE["worker_id"]),FILTER_SANITIZE_STRING);
+                        $consumptionsearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
+                        $consumptionsearchnumber = filter_var(trim($_POST['search-number']), FILTER_SANITIZE_STRING);
+                        if($_COOKIE['consumption_type'] == 'sale') {$consumptiontype="продажа";}
+                        if($_COOKIE['consumption_type'] == 'writeoff') {$consumptiontype="списание";}
+                        $date = date('Y-m-d H:i:s');
+                        $sql = "INSERT IGNORE INTO `consumption` (`worker_id`, `product_id`, `quantity`, `consumption_type`, `consumption_date`) VALUES ('$worker_id', '$consumptionsearchtext', '$consumptionsearchnumber', '$consumptiontype', '$date')";
+                        $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+                        if (mysqli_query($link, $sql)) {
+                          echo "<br>Запись успешно создана";
+                        }
+                        /*header("Refresh:0");*/
+                      }
+                      if(array_key_exists('btn_consumption',$_POST)){
+                        btn_consumption();
+                      }
+                    ?>
+                </form>
+              <?php } ?>
+            </div>
           </main>
           <footer>
             <div class="footer-content">

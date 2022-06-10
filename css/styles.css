@@ -253,8 +253,15 @@ main h1 {
     cursor: pointer;
     /*width: 100%;*/
 }
+.formbtn-current {
+    background: #cccccc;
+    color: #313131;
+}
 .form-search p {
     text-align: left;
+}
+.form-reporting p {
+    text-align: right;
 }
 .form-search {
     padding: 16px;
@@ -264,6 +271,18 @@ main h1 {
 }
 .form-search-two-buttons {
     width: 424px;
+}
+.form-consumption-type {
+    width: 234px;
+}
+.form-reporting-type {
+    width: 197px;
+}
+.form-consumption {
+    width: 270px;
+}
+.form-reporting{
+    width: 180px;
 }
 .form-search input, .form-search button {
     border-radius: 5px;
@@ -277,6 +296,31 @@ main h1 {
     background: #cccccc;
 }
 .form-container input[type=search-text]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+.form-container input[type=number]{
+    width: 80px;
+    padding: 10px;
+    margin: 5px 0 0 0;
+    margin-right: 44px;
+    display: inline-block;
+    border: none;
+    background: #cccccc;
+}
+.form-container input[type=number]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+.form-container input[type=date]{
+    max-width: 117px;
+    padding: 10px;
+    margin: 5px 0 0 0;
+    display: inline-block;
+    border: none;
+    background: #cccccc;
+}
+.form-container input[type=date]:focus {
     background-color: #ddd;
     outline: none;
 }
@@ -320,6 +364,9 @@ main h1 {
     width: 220px;
     border-radius: 10px;
     background-color: #8795a3;
+}
+.padding-eight {
+    padding: 8px;
 }
 /**/
 /* footer */
@@ -462,13 +509,21 @@ footer {
         text-align: left;
         font-size: 16px;
     }
+    .form-reporting p {
+        text-align: right;
+    }
     .form-search {
         padding: 8px;
         border-radius: 10px;
-        width: 250px;
     }
     .form-search-two-buttons {
         width: 315px;
+    }
+    .form-consumption-type {
+        width: 183px;
+    }
+    .form-reporting-type {
+        width: 154px;
     }
     .form-search input, .form-search button {
         border-radius: 5px;
@@ -517,6 +572,20 @@ footer {
         margin-top: 8px;
         width: 200px;
         border-radius: 10px;
+    }
+    .form-consumption {
+        width: 202px;
+    }
+    .form-reporting{
+        width: 160px;
+    }
+    .form-container input[type=number]{
+        width: 80px;
+        padding: 10px;
+        margin: 5px 0 0 0;
+    }
+    .consumption-selector {
+        max-width: 50px;
     }
     /* footer */
     .footer-content {

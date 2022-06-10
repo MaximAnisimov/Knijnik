@@ -160,6 +160,7 @@
             worker_id INT(10) UNSIGNED,
 		    product_id INT(10) UNSIGNED,
             quantity INT(10) UNSIGNED,
+            consumption_type VARCHAR(10) NOT NULL,
             consumption_date DATETIME,
             FOREIGN KEY (worker_id) REFERENCES workers(worker_id),
             FOREIGN KEY (product_id) REFERENCES products(product_id)

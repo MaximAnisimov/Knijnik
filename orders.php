@@ -13,6 +13,8 @@
       <?php
         setcookie('serachtype', $serachtype, time() - 3600, "/");
         setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
+        setcookie('consumption_type', $consumption_type, time() - 3600, "/");
+        setcookie('reporting_type', $consumption_type, time() - 3600, "/");
         if($_COOKIE['worker_id'] == ''): //если нет cookie   
           header('location: /');
         else: //если есть cookie
@@ -62,22 +64,22 @@
                     <button type="submit" name="btn_reset" id="btn_reset" class="formbtn-search">Сброс</button>
                   </div>
                   <?php
-                      function btn_order_function()
+                      function btn_order()
                       {
                         $ordersearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
                         setcookie('ordersearchtext', $ordersearchtext, time() + 3600, "/");
                         header("Refresh:0");
                       }
                       if(array_key_exists('btn_order',$_POST)){
-                        btn_order_function();
+                        btn_order();
                       }
                       function btn_reset()
                       {
                         setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
-                        eader('location: /');
+                        header("Refresh:0");
                       }
                       if(array_key_exists('btn_reset',$_POST)){
-                        btn_order_function();
+                        btn_reset();
                       }
                     ?>
               </form>
@@ -112,8 +114,7 @@
                           else {
                             $sort_sql = reset($sort_list);
                           }
-                          /*  */
-                          $serachtype = $_COOKIE['serachtype'];
+                          /* Запрос */
                           $ordersearchtext =  $_COOKIE['ordersearchtext'];
                           $sql = "SELECT orders.order_number, orders.order_quantity, products.code,  products.barcode, products.product_name, products.sell_price
                                   FROM orders
@@ -159,15 +160,14 @@
                             <td><?php echo $row["code"] ?></td>
                             <td><?php echo $row["barcode"] ?></td>
                             <td><?php echo $row["product_name"] ?></td>
-                            <td><?php echo $row["sell_price"] ?></td>
+                            <td><?php echo $row["sell_price"],' ₽' ?></td>
                             <td><?php echo $row["order_quantity"] ?></td>
                             <td><?php $cost=$row["sell_price"]*$row["order_quantity"]; $totalcost=$totalcost+$cost; echo $cost+".00 ₽" ?></td>
                           </tr>
                           <?php endforeach ?>
                           </table>
                         </div>
-                        
-                    <?php echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>'; }?>
+                    <?php echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>'; } ?>
             </div>
           </main>
           <footer>
