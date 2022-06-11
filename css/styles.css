@@ -282,7 +282,7 @@ main h1 {
     width: 270px;
 }
 .form-reporting{
-    width: 180px;
+    width: 314px;
 }
 .form-search input, .form-search button {
     border-radius: 5px;
@@ -367,6 +367,9 @@ main h1 {
 }
 .padding-eight {
     padding: 8px;
+}
+.reporting-btn {
+    margin-right: -135px;
 }
 /**/
 /* footer */
@@ -577,7 +580,7 @@ footer {
         width: 202px;
     }
     .form-reporting{
-        width: 160px;
+        width: 291px;
     }
     .form-container input[type=number]{
         width: 80px;
@@ -586,6 +589,9 @@ footer {
     }
     .consumption-selector {
         max-width: 50px;
+    }
+    .reporting-btn {
+        margin-right: -151px;
     }
     /* footer */
     .footer-content {

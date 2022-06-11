@@ -182,7 +182,7 @@
 		    order_id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
             order_number INT(10) UNSIGNED NOT NULL,
 		    product_id INT(10) UNSIGNED NOT NULL,
-            order_quantity INT(10) UNSIGNED NOT NULL,
+            quantity INT(10) UNSIGNED NOT NULL,
             FOREIGN KEY (product_id) REFERENCES products(product_id)
 	    )";
     if (mysqli_query($link, $sql)) {
@@ -197,7 +197,7 @@
         echo '<br>Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
         exit;
     }
-    $sql = "INSERT IGNORE INTO `orders` (`order_id`, `order_number`, `product_id`, `order_quantity`) VALUES ('1', '500321', '2', '1'), ('2', '500321', '7', '1'), ('3', '500321', '13', '2'), ('4', '500321', '15', '1'), ('5', '174824', '9', '1'), ('6', '174824', '11', '2'), ('7', '400932', '3', '1'), ('8', '400932', '12', '3'), ('9', '400932', '13', '2'), ('10', '400932', '14', '1'), ('11', '400932', '15', '1')";
+    $sql = "INSERT IGNORE INTO `orders` (`order_id`, `order_number`, `product_id`, `quantity`) VALUES ('1', '500321', '2', '1'), ('2', '500321', '7', '1'), ('3', '500321', '13', '2'), ('4', '500321', '15', '1'), ('5', '174824', '9', '1'), ('6', '174824', '11', '2'), ('7', '400932', '3', '1'), ('8', '400932', '12', '3'), ('9', '400932', '13', '2'), ('10', '400932', '14', '1'), ('11', '400932', '15', '1')";
     if (mysqli_query($link, $sql)) {
         echo "<br>Запись успешно создана";
     } else {

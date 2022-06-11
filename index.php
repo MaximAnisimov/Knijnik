@@ -72,12 +72,26 @@
           <nav id="nav">
             <div class="nav-content nav-scroll">
               <ul class="nav-menu">
-                <li><a href="/" class="current">Склад</a></li>
-                <li><a href="supplies.php">Приемка товара</a></li>
-                <li><a href="consumption.php">Расход</a></li>
-                <li><a href="orders.php">Заказы</a></li>
-                <li><a href="reporting.php">Отчетность</a></li>
-                <li><a href="info.php">Инфо</a></li>
+                <?php if($worker_role == 'Администратор') {
+                echo '<li><a href="/" class="current">Склад</a></li>';
+                echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                echo '<li><a href="consumption.php">Расход</a></li>';
+                echo '<li><a href="orders.php">Заказы</a></li>';
+                echo '<li><a href="reporting.php">Отчетность</a></li>';
+                echo '<li><a href="info.php">Инфо</a></li>';
+                } else if($worker_role == 'Кладовщик') {
+                echo '<li><a href="/" class="current">Склад</a></li>';
+                echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                echo '<li><a href="consumption.php">Расход</a></li>';
+                echo '<li><a href="reporting.php">Отчетность</a></li>';
+                echo '<li><a href="info.php">Инфо</a></li>';
+                } else if($worker_role == 'Продавец') {
+                echo '<li><a href="/" class="current">Склад</a></li>';
+                echo '<li><a href="consumption.php">Расход</a></li>';
+                echo '<li><a href="orders.php">Заказы</a></li>';
+                echo '<li><a href="reporting.php">Отчетность</a></li>';
+                echo '<li><a href="info.php">Инфо</a></li>';
+                }?>
               </ul>
             </div>
           </nav>
@@ -100,9 +114,9 @@
                       function btn_stock()
                       {
                         $serachtype = filter_input(INPUT_POST, 'serach-type', FILTER_SANITIZE_STRING);
-                        $stocksearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
+                        $searchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
                         setcookie('serachtype', $serachtype, time() + 3600, "/");
-                        setcookie('stocksearchtext', $stocksearchtext, time() + 3600, "/");
+                        setcookie('searchtext', $searchtext, time() + 3600, "/");
                         header('location: /');
                       }
                       if(array_key_exists('btn_stock',$_POST)){
@@ -111,7 +125,7 @@
                       function btn_reset()
                       {
                         setcookie('serachtype', $serachtype, time() - 3600, "/");
-                        setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
+                        setcookie('searchtext', $searchtext, time() - 3600, "/");
                         header('location: /');
                       }
                       if(array_key_exists('btn_reset',$_POST)){
@@ -158,7 +172,7 @@
                           $sort_sql = reset($sort_list);
                         }
                         /* запрос при отсутствии параметров поиска */
-                        if($_COOKIE['stocksearchtext'] == '') {
+                        if($_COOKIE['searchtext'] == '') {
                           $sql = "SELECT products.*, publishers.publisher_name, group_concat(genres.genre_name), authors.author_name, stock.stock_quantity
                                   FROM products
                                   LEFT JOIN publishers
@@ -179,7 +193,7 @@
                         /* запрос при наличии параметров поиска */
                         else {
                           $serachtype = $_COOKIE['serachtype'];
-                          $stocksearchtext =  $_COOKIE['stocksearchtext'];
+                          $searchtext =  $_COOKIE['searchtext'];
                           $sql = "SELECT products.*, publishers.publisher_name, group_concat(genres.genre_name), authors.author_name, stock.stock_quantity
                                   FROM products
                                   LEFT JOIN publishers
@@ -194,7 +208,7 @@
                                   ON authors.author_id=products_authors.author_id
                                   LEFT JOIN stock
                                   ON stock.stock_id=products.product_id
-                                  WHERE $serachtype like '%$stocksearchtext%'
+                                  WHERE $serachtype like '%$searchtext%'
                                   GROUP BY products.product_id, products_authors.author_id
                                   ORDER BY $sort_sql";
                         }

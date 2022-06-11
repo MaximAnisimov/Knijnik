@@ -45,12 +45,26 @@
           <nav id="nav">
             <div class="nav-content nav-scroll">
               <ul class="nav-menu">
-                <li><a href="/">Склад</a></li>
-                <li><a href="supplies.php">Приемка товара</a></li>
-                <li><a href="consumption.php">Расход</a></li>
-                <li><a href="orders.php">Заказы</a></li>
-                <li><a href="reporting.php">Отчетность</a></li>
-                <li><a href="info.php" class="current">Инфо</a></li>
+                <?php if($worker_role == 'Администратор') {
+                  echo '<li><a href="/">Склад</a></li>';
+                  echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                  echo '<li><a href="consumption.php">Расход</a></li>';
+                  echo '<li><a href="orders.php">Заказы</a></li>';
+                  echo '<li><a href="reporting.php">Отчетность</a></li>';
+                  echo '<li><a href="info.php" class="current">Инфо</a></li>';
+                  } else if($worker_role == 'Кладовщик') {
+                  echo '<li><a href="/">Склад</a></li>';
+                  echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                  echo '<li><a href="consumption.php">Расход</a></li>';
+                  echo '<li><a href="reporting.php">Отчетность</a></li>';
+                  echo '<li><a href="info.php" class="current">Инфо</a></li>';
+                  } else if($worker_role == 'Продавец') {
+                  echo '<li><a href="/">Склад</a></li>';
+                  echo '<li><a href="consumption.php">Расход</a></li>';
+                  echo '<li><a href="orders.php">Заказы</a></li>';
+                  echo '<li><a href="reporting.php">Отчетность</a></li>';
+                  echo '<li><a href="info.php" class="current">Инфо</a></li>';
+                }?>
               </ul>
             </div>
           </nav>

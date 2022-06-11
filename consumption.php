@@ -44,12 +44,26 @@
           <nav id="nav">
             <div class="nav-content nav-scroll">
               <ul class="nav-menu">
-                <li><a href="/">Склад</a></li>
-                <li><a href="supplies.php">Приемка товара</a></li>
-                <li><a href="consumption.php" class="current">Расход</a></li>
-                <li><a href="orders.php">Заказы</a></li>
-                <li><a href="reporting.php">Отчетность</a></li>
-                <li><a href="info.php">Инфо</a></li>
+              <?php if($worker_role == 'Администратор') {
+                echo '<li><a href="/">Склад</a></li>';
+                echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                echo '<li><a href="consumption.php" class="current">Расход</a></li>';
+                echo '<li><a href="orders.php">Заказы</a></li>';
+                echo '<li><a href="reporting.php">Отчетность</a></li>';
+                echo '<li><a href="info.php">Инфо</a></li>';
+                } else if($worker_role == 'Кладовщик') {
+                echo '<li><a href="/">Склад</a></li>';
+                echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                echo '<li><a href="consumption.php" class="current">Расход</a></li>';
+                echo '<li><a href="reporting.php">Отчетность</a></li>';
+                echo '<li><a href="info.php">Инфо</a></li>';
+                } else if($worker_role == 'Продавец') {
+                echo '<li><a href="/">Склад</a></li>';
+                echo '<li><a href="consumption.php" class="current">Расход</a></li>';
+                echo '<li><a href="orders.php">Заказы</a></li>';
+                echo '<li><a href="reporting.php">Отчетность</a></li>';
+                echo '<li><a href="info.php">Инфо</a></li>';
+                }?>
               </ul>
             </div>
           </nav>
@@ -97,23 +111,29 @@
                   <?php
                       function btn_consumption()
                       {
-                        $worker_id = filter_var(trim($_COOKIE["worker_id"]),FILTER_SANITIZE_STRING);
+                        $serachtype = filter_input(INPUT_POST, 'serach-type', FILTER_SANITIZE_STRING);
+                        $worker_id = filter_var(trim($_COOKIE["worker_id"]),FILTER_SANITIZE_STRING);/*нужно ли*/
                         $consumptionsearchtext = filter_var(trim($_POST['search-text']), FILTER_SANITIZE_STRING);
                         $consumptionsearchnumber = filter_var(trim($_POST['search-number']), FILTER_SANITIZE_STRING);
+
                         if($_COOKIE['consumption_type'] == 'sale') {$consumptiontype="продажа";}
                         if($_COOKIE['consumption_type'] == 'writeoff') {$consumptiontype="списание";}
                         $date = date('Y-m-d H:i:s');
-                        $sql = "INSERT IGNORE INTO `consumption` (`worker_id`, `product_id`, `quantity`, `consumption_type`, `consumption_date`) VALUES ('$worker_id', '$consumptionsearchtext', '$consumptionsearchnumber', '$consumptiontype', '$date')";
                         $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+                        $result = $link->query("SELECT * FROM products WHERE $serachtype like '%$consumptionsearchtext%'");
+                        $product = $result->fetch_assoc();
+                        $product_id = $product['product_id'];
+                        $sql = "INSERT IGNORE INTO `consumption` (`worker_id`, `product_id`, `quantity`, `consumption_type`, `consumption_date`) VALUES ('$worker_id', '$product_id', '$consumptionsearchnumber', '$consumptiontype', '$date')";
                         if (mysqli_query($link, $sql)) {
-                          echo "<br>Запись успешно создана";
+                          setcookie('message', '1', time() + 3, "/");
                         }
-                        /*header("Refresh:0");*/
+                        header("Refresh:0");
                       }
                       if(array_key_exists('btn_consumption',$_POST)){
                         btn_consumption();
                       }
                     ?>
+                    <?php if($_COOKIE['message'] == '1') { echo '<div class="order-message">Запись успешно создана '; } else { }?>
                 </form>
               <?php } ?>
             </div>

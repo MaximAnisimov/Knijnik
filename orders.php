@@ -44,12 +44,22 @@
           <nav id="nav">
             <div class="nav-content nav-scroll">
               <ul class="nav-menu">
-                <li><a href="/">Склад</a></li>
-                <li><a href="supplies.php">Приемка товара</a></li>
-                <li><a href="consumption.php">Расход</a></li>
-                <li><a href="orders.php" class="current">Заказы</a></li>
-                <li><a href="reporting.php">Отчетность</a></li>
-                <li><a href="info.php">Инфо</a></li>
+                <?php if($worker_role == 'Администратор') {
+                  echo '<li><a href="/">Склад</a></li>';
+                  echo '<li><a href="supplies.php">Приемка товара</a></li>';
+                  echo '<li><a href="consumption.php">Расход</a></li>';
+                  echo '<li><a href="orders.php" class="current">Заказы</a></li>';
+                  echo '<li><a href="reporting.php">Отчетность</a></li>';
+                  echo '<li><a href="info.php">Инфо</a></li>';
+                  } else if($worker_role == 'Кладовщик') {
+                  header('location: /');
+                  } else if($worker_role == 'Продавец') {
+                  echo '<li><a href="/">Склад</a></li>';
+                  echo '<li><a href="consumption.php">Расход</a></li>';
+                  echo '<li><a href="orders.php" class="current">Заказы</a></li>';
+                  echo '<li><a href="reporting.php">Отчетность</a></li>';
+                  echo '<li><a href="info.php">Инфо</a></li>';
+                }?>
               </ul>
             </div>
           </nav>
@@ -103,8 +113,8 @@
                             'product_name_desc'  => '`product_name` DESC',
                             'sell_price_asc'   => '`sell_price`',
                             'sell_price_desc'  => '`sell_price` DESC',
-                            'order_quantity_asc'   => '`order_quantity`',
-                            'order_quantity_desc'  => '`order_quantity` DESC',
+                            'quantity_asc'   => '`quantity`',
+                            'quantity_desc'  => '`quantity` DESC',
                           );
                           /* Проверка GET-переменной */
                           $sort = @$_GET['sort'];
@@ -116,7 +126,7 @@
                           }
                           /* Запрос */
                           $ordersearchtext =  $_COOKIE['ordersearchtext'];
-                          $sql = "SELECT orders.order_number, orders.order_quantity, products.code,  products.barcode, products.product_name, products.sell_price
+                          $sql = "SELECT orders.order_number, orders.quantity, products.code,  products.barcode, products.product_name, products.sell_price
                                   FROM orders
                                   LEFT JOIN products
                                   ON products.product_id=orders.product_id
@@ -139,35 +149,34 @@
                             }
                           }
                         }
+                      ?>
+                      <div class="table-container table-scroll">
+                            <table>
+                            <tr>
+                              <th>№</th>
+                              <th><?php echo sort_link_th("Артикул", "code_asc", "code_desc"); ?></th>
+                              <th><?php echo sort_link_th("Штрихкод", "barcode_asc", "barcode_desc"); ?></th>
+                              <th><?php echo sort_link_th("Наименование", "product_name_asc", "product_name_desc"); ?></th>
+                              <th><?php echo sort_link_th("Цена за Шт.", "sell_price_asc", "sell_price_desc"); ?></th>
+                              <th><?php echo sort_link_th("Кол-во", "quantity_asc", "quantity_desc"); ?></th>
+                              <th>Стоимость</th>
+                            </tr>
+                            <?php $count=1; foreach ($list as $row): ?>
+                            <tr>
+                              <td><?php echo $count; $count=$count+1; ?></td>
+                              <td><?php echo $row["code"] ?></td>
+                              <td><?php echo $row["barcode"] ?></td>
+                              <td><?php echo $row["product_name"] ?></td>
+                              <td><?php echo $row["sell_price"],' ₽' ?></td>
+                              <td><?php echo $row["quantity"] ?></td>
+                              <td><?php $cost=$row["sell_price"]*$row["quantity"]; $totalcost=$totalcost+$cost; echo $cost,".00 ₽" ?></td>
+                            </tr>
+                            <?php endforeach ?>
+                            </table>
+                          </div>
+                      <?php echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>'; 
                       }
                     ?>
-                    <?php if($_COOKIE['ordersearchtext'] == '') {
-                    } else { ?>
-                    <div class="table-container table-scroll">
-                          <table>
-                          <tr>
-                            <th>№</th>
-                            <th><?php echo sort_link_th("Артикул", "code_asc", "code_desc"); ?></th>
-                            <th><?php echo sort_link_th("Штрихкод", "barcode_asc", "barcode_desc"); ?></th>
-                            <th><?php echo sort_link_th("Наименование", "product_name_asc", "product_name_desc"); ?></th>
-                            <th><?php echo sort_link_th("Цена за Шт.", "sell_price_asc", "sell_price_desc"); ?></th>
-                            <th><?php echo sort_link_th("Кол-во", "order_quantity_asc", "order_quantity_asc_desc"); ?></th>
-                            <th>Стоимость</th>
-                          </tr>
-                          <?php $count=1; foreach ($list as $row): ?>
-                          <tr>
-                            <td><?php echo $count; $count=$count+1; ?></td>
-                            <td><?php echo $row["code"] ?></td>
-                            <td><?php echo $row["barcode"] ?></td>
-                            <td><?php echo $row["product_name"] ?></td>
-                            <td><?php echo $row["sell_price"],' ₽' ?></td>
-                            <td><?php echo $row["order_quantity"] ?></td>
-                            <td><?php $cost=$row["sell_price"]*$row["order_quantity"]; $totalcost=$totalcost+$cost; echo $cost+".00 ₽" ?></td>
-                          </tr>
-                          <?php endforeach ?>
-                          </table>
-                        </div>
-                    <?php echo '<div class="order-message">Заказ номер ',$ordersearchtext,'<br>ИТОГО: ',$totalcost,' ₽</div>'; } ?>
             </div>
           </main>
           <footer>
