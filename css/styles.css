@@ -406,9 +406,6 @@ footer {
 /**/
 /* стили для мобильных */
 @media (max-width: 500px) {
-    body {
-        background-image: none;
-    }
     .container {
         width: 375px;
     }

@@ -111,9 +111,9 @@
                     function btn_reporting()
                     {
                       $reporting_from = filter_var(trim($_POST['reporting-from']), FILTER_SANITIZE_STRING);
-                      setcookie('reporting_from', $reporting_from, time() + 1, "/");
+                      setcookie('reporting_from', $reporting_from, time() + 3600, "/");
                       $reporting_to = filter_var(trim($_POST['reporting-to']), FILTER_SANITIZE_STRING);
-                      setcookie('reporting_to', $reporting_to, time() + 1, "/");
+                      setcookie('reporting_to', $reporting_to, time() + 3600, "/");
                       header("Refresh:0");
                     }
                     if(array_key_exists('btn_reporting',$_POST)){
