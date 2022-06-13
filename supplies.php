@@ -9,97 +9,97 @@
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-    <body>
-      <?php
-        setcookie('serachtype', $serachtype, time() - 3600, "/");
-        setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
-        setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
-        setcookie('consumption_type', $consumption_type, time() - 3600, "/");
-        setcookie('reporting_type', $consumption_type, time() - 3600, "/");
-        setcookie('reporting_from', $reporting_from, time() - 3600, "/");
-        setcookie('reporting_to', $reporting_to, time() - 3600, "/");
-        if($_COOKIE['worker_id'] == ''): //если нет cookie   
-          header('location: /');
-        else: //если есть cookie
-        $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
-        if (!$link) {
-            echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
-            exit;
-        }
-        if ($link) {
-          $worker_id = filter_var(trim($_COOKIE["worker_id"]),FILTER_SANITIZE_STRING);
-          $result = $link->query("SELECT * FROM `workers` WHERE `worker_id` = '$worker_id'");
-          $worker = $result->fetch_assoc();
-          $worker_name = $worker['worker_name'];
-          $worker_role = $worker['role'];
-        }          
-      ?>
-        <!-- страница приемка -->
-        <div class="container contain" id="container">
-          <header id="header">
-              <img src="images/logo_wide.png" class="logo"/>
-              <h1>Книги для всей семьи!</h1>
-              <div class="header-worker">
-                <div class="header-box-left"><a href="XXX.php" class="header-name"><?php echo $worker_name; ?> — <?php echo $worker_role; ?></a></div>
-                <div class="header-box-right"><a href="php/exit.php" class="logout">Выйти</a></div>
-              </div>
-          </header>
-          <nav id="nav">
-            <div class="nav-content nav-scroll">
-              <ul class="nav-menu">
-                <?php if($worker_role == 'Администратор') {
-                  echo '<li><a href="/">Склад</a></li>';
-                  echo '<li><a href="supplies.php" class="current">Приемка товара</a></li>';
-                  echo '<li><a href="consumption.php">Расход</a></li>';
-                  echo '<li><a href="orders.php">Заказы</a></li>';
-                  echo '<li><a href="reporting.php">Отчетность</a></li>';
-                  echo '<li><a href="info.php">Инфо</a></li>';
-                  } else if($worker_role == 'Кладовщик') {
-                  echo '<li><a href="/">Склад</a></li>';
-                  echo '<li><a href="supplies.php" class="current">Приемка товара</a></li>';
-                  echo '<li><a href="consumption.php">Расход</a></li>';
-                  echo '<li><a href="reporting.php">Отчетность</a></li>';
-                  echo '<li><a href="info.php">Инфо</a></li>';
-                  } else if($worker_role == 'Продавец') {
-                  header('location: /');
-                }?>
-              </ul>
-            </div>
-          </nav>
-          <main>
-            <div class="main-content">
-            </div>
-          </main>
-          <footer>
-            <div class="footer-content">
-              <div class="footer-box footer-box-right">
-                <div>Разработано Анисимовым Максимом</div>
-                <div>Компания Печатный Мир г. Сургут</div>
-              </div>
-            </div>
-          </footer>
-          <script>
-            // скрипт для липкой навигации
-            $(document).ready(function () {
-                const nav = $('#nav');
-                const navOffset = nav.offset().top;
-                const navHeight = nav.height();
-                $(window).scroll(function(){
-                    const scrolled = $(this).scrollTop();
-                    if (scrolled > navOffset) {
-                        $('#container').addClass('nav-fixed');
-                        $('#header').css({marginBotton: navHeight});
-                    }
-                    else if (scrolled < navOffset) {
-                        $('#container').removeClass('nav-fixed');
-                        $('#header').css({marginBotton: 0});
-                    }
-                });
-            });
-          </script>
+<body>
+  <?php
+    setcookie('serachtype', $serachtype, time() - 3600, "/");
+    setcookie('stocksearchtext', $stocksearchtext, time() - 3600, "/");
+    setcookie('ordersearchtext', $ordersearchtext, time() - 3600, "/");
+    setcookie('consumption_type', $consumption_type, time() - 3600, "/");
+    setcookie('reporting_type', $consumption_type, time() - 3600, "/");
+    setcookie('reporting_from', $reporting_from, time() - 3600, "/");
+    setcookie('reporting_to', $reporting_to, time() - 3600, "/");
+    if($_COOKIE['worker_id'] == ''): //если нет cookie   
+      header('location: /');
+    else: //если есть cookie
+    $link = new mysqli('localhost', 'root', 'root', 'knizhnik_db');
+    if (!$link) {
+        echo 'Не могу соединиться с БД. Код ошибки: ' . mysqli_connect_errno() . ', ошибка: ' . mysqli_connect_error();
+        exit;
+    }
+    if ($link) {
+      $worker_id = filter_var(trim($_COOKIE["worker_id"]),FILTER_SANITIZE_STRING);
+      $result = $link->query("SELECT * FROM `workers` WHERE `worker_id` = '$worker_id'");
+      $worker = $result->fetch_assoc();
+      $worker_name = $worker['worker_name'];
+      $worker_role = $worker['role'];
+    }          
+  ?>
+    <!-- страница приемка -->
+    <div class="container contain" id="container">
+      <header id="header">
+          <img src="images/logo_wide.png" class="logo"/>
+          <h1>Книги для всей семьи!</h1>
+          <div class="header-worker">
+            <div class="header-box-left"><a href="XXX.php" class="header-name"><?php echo $worker_name; ?> — <?php echo $worker_role; ?></a></div>
+            <div class="header-box-right"><a href="php/exit.php" class="logout">Выйти</a></div>
+          </div>
+      </header>
+      <nav id="nav">
+        <div class="nav-content nav-scroll">
+          <ul class="nav-menu">
+            <?php if($worker_role == 'Администратор') {
+              echo '<li><a href="/">Склад</a></li>';
+              echo '<li><a href="supplies.php" class="current">Приемка товара</a></li>';
+              echo '<li><a href="consumption.php">Расход</a></li>';
+              echo '<li><a href="orders.php">Заказы</a></li>';
+              echo '<li><a href="reporting.php">Отчетность</a></li>';
+              echo '<li><a href="info.php">Инфо</a></li>';
+              } else if($worker_role == 'Кладовщик') {
+              echo '<li><a href="/">Склад</a></li>';
+              echo '<li><a href="supplies.php" class="current">Приемка товара</a></li>';
+              echo '<li><a href="consumption.php">Расход</a></li>';
+              echo '<li><a href="reporting.php">Отчетность</a></li>';
+              echo '<li><a href="info.php">Инфо</a></li>';
+              } else if($worker_role == 'Продавец') {
+              header('location: /');
+            }?>
+          </ul>
         </div>
-      <?php
-        endif;
-      ?>
-    </body>
+      </nav>
+      <main>
+        <div class="main-content">
+        </div>
+      </main>
+      <footer>
+        <div class="footer-content">
+          <div class="footer-box footer-box-right">
+            <div>Разработано Анисимовым Максимом</div>
+            <div>Компания Печатный Мир г. Сургут</div>
+          </div>
+        </div>
+      </footer>
+      <script>
+        // скрипт для липкой навигации
+        $(document).ready(function () {
+            const nav = $('#nav');
+            const navOffset = nav.offset().top;
+            const navHeight = nav.height();
+            $(window).scroll(function(){
+                const scrolled = $(this).scrollTop();
+                if (scrolled > navOffset) {
+                    $('#container').addClass('nav-fixed');
+                    $('#header').css({marginBotton: navHeight});
+                }
+                else if (scrolled < navOffset) {
+                    $('#container').removeClass('nav-fixed');
+                    $('#header').css({marginBotton: 0});
+                }
+            });
+        });
+      </script>
+    </div>
+  <?php
+    endif;
+  ?>
+</body>
 </html>
